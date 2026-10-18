@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { authService, AuthRole } from '../services/authService';
 import { useAuthStore } from '../store/useAuthStore';
 import { isSupabaseConfigured } from '../services/supabaseClient';
+import { LegalModal, LegalDoc } from '../components/LegalModal';
 
 export const AuthView: React.FC = () => {
   const setUser = useAuthStore((s) => s.setUser);
@@ -15,6 +16,7 @@ export const AuthView: React.FC = () => {
   const [securityKey, setSecurityKey] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [legalDoc, setLegalDoc] = useState<LegalDoc | null>(null);
   const [busy, setBusy] = useState(false);
 
   const isSignup = mode === 'signup';
@@ -204,7 +206,29 @@ export const AuthView: React.FC = () => {
             {isSignup ? 'Sign in' : 'Create one'}
           </button>
         </div>
+
+        <div style={{ marginTop: 14, textAlign: 'center', fontSize: 10.5, color: 'var(--ink-tertiary)' }}>
+          <button
+            type="button"
+            className="btn btn-tertiary"
+            style={{ fontSize: 10.5, padding: 0 }}
+            onClick={() => setLegalDoc('terms')}
+          >
+            Terms &amp; Conditions
+          </button>
+          {' · '}
+          <button
+            type="button"
+            className="btn btn-tertiary"
+            style={{ fontSize: 10.5, padding: 0 }}
+            onClick={() => setLegalDoc('privacy')}
+          >
+            Privacy Policy
+          </button>
+        </div>
       </div>
+
+      <LegalModal doc={legalDoc} onClose={() => setLegalDoc(null)} />
     </div>
   );
 };
