@@ -1,0 +1,29 @@
+# Secrets and local environment files - never commit these
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.vite/
+*.tsbuildinfo
+
+# Logs and OS/editor junk
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/
+.claude/
+
+# Private database setup files (they contain the real admin security code)
+database/
+
+# Test output
+test-results/
+playwright-report/

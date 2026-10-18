@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier Contracting — Architectural Core v2.1</title>
+  <meta name="description" content="High-precision architectural folio and construction site management system for luxury residential commissions.">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/views.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- ======================================================================
+       GLOBAL TOP BAR
+       ====================================================================== -->
+  <header class="global-header">
+    <div class="header-left">
+      <div class="brand-badge">
+        <div class="brand-symbol">A</div>
+        <div>
+          <span class="brand-title">ATELIER CONTRACTING</span>
+        </div>
+      </div>
+
+      <!-- Mode Switcher -->
+      <div class="workspace-switcher">
+        <button class="workspace-btn active" data-workspace="admin">ADMIN WORKSPACE</button>
+        <button class="workspace-btn" data-workspace="client">CUSTOMER PORTAL (RAHUL SHARMA)</button>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="search-input-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="global-search-input" class="form-input" placeholder="Search architectural schedules, client portfolios, blueprints...">
+        <span class="kbd-shortcut">⌘K</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="studio-status-indicator">
+        <span class="status-live-dot"></span>
+        <span>11:42 BST • STUDIO 01</span>
+      </div>
+
+      <button class="btn btn-icon" id="btn-notifications" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+      </button>
+
+      <div class="user-profile-widget">
+        <div class="user-avatar-badge">JV</div>
+        <div class="user-meta">
+          <span class="user-name">Julian Vane</span>
+          <span class="user-role">PRINCIPAL DIRECTOR</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       APP BODY: SIDEBAR + VIEWPORT
+       ====================================================================== -->
+  <div class="app-body">
+    <!-- Left Architectural Sidebar -->
+    <aside class="app-sidebar">
+      <div>
+        <div class="sidebar-brand-header">
+          <div>
+            <div class="label-xs">ATELIER STUDIO 05</div>
+            <div class="sidebar-edition">Architectural Core</div>
+          </div>
+          <span class="sidebar-version">v2.1</span>
+        </div>
+
+        <nav class="sidebar-nav-section">
+          <div class="sidebar-nav-title label-xs">NAVIGATION SCHEDULE</div>
+          <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active" data-target-view="view-overview">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>Dashboard</span>
+            </li>
+            <li class="sidebar-nav-item" data-target-view="view-customers">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>Customers</span>
+            </li>
+            <li class="sidebar-nav-item" data-target-view="view-overview">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              <span>Projects</span>
+            </li>
+            <li class="sidebar-nav-item" data-target-view="view-blueprints">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="2" x2="12" y2="22"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+              <span>Drawings &amp; Blueprints</span>
+            </li>
+            <li class="sidebar-nav-item" data-target-view="view-blueprints">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <span>Documents &amp; Specs</span>
+            </li>
+            <li class="sidebar-nav-item" data-target-view="view-overview">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
+              <span>Work &amp; Site Updates</span>
+            </li>
+            <li class="sidebar-nav-item" data-open-upload-modal>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>Upload Studio</span>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-nav-item" style="padding: 7px 12px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Settings</span>
+        </div>
+        <div class="sidebar-nav-item" id="nav-client-view-footer" style="padding: 7px 12px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span>Client View (Portal)</span>
+        </div>
+        <div style="padding: 10px 12px; font-size: 11px; color: var(--ink-secondary); display:flex; align-items:center; gap:6px;">
+          <span style="width:6px; height:6px; border-radius:50%; background-color:#111;"></span>
+          <span>STUDIO LONDON</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Viewport Area -->
+    <main class="main-viewport">
+
+      <!-- ==================================================================
+           VIEW 1: ATELIER STUDIO ADMINISTRATION — OVERVIEW
+           ================================================================== -->
+      <section id="view-overview" class="view-panel active">
+        <div class="view-header">
+          <div class="view-header-titles">
+            <div class="view-header-folio">
+              <span class="status-live-dot"></span>
+              <span>OPERATIONAL FOLIO • 28 ACTIVE CYCLE</span>
+            </div>
+            <h1 class="view-header-title">Atelier Studio Administration — Overview</h1>
+            <p class="view-header-sub">
+              Structural management schedule, live project matrices, revision approvals, and site logs across all active residential commissions.
+            </p>
+          </div>
+
+          <div class="view-header-actions">
+            <button class="btn btn-secondary" data-open-upload-modal>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              UPLOAD DRAWING
+            </button>
+            <button class="btn btn-secondary" data-open-client-modal>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              NEW PROJECT
+            </button>
+            <button class="btn btn-primary" id="btn-filter-client-jump">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+              FILTER BY CLIENT
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Top Metric Quad Tiles -->
+        <div class="metrics-quad-grid">
+          <div class="metric-tile">
+            <div class="metric-tile-header">
+              <span class="label-xs">REGISTRY CAPACITY</span>
+              <div class="metric-tile-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              </div>
+            </div>
+            <div>
+              <div class="metric-tile-val-wrap">
+                <span class="metric-tile-val">28</span>
+                <span class="metric-tile-unit">PORTFOLIOS</span>
+              </div>
+              <div class="metric-tile-title">Total Active Clients</div>
+              <div class="metric-tile-sub">▲ 4 onboarded this month</div>
+            </div>
+          </div>
+
+          <div class="metric-tile">
+            <div class="metric-tile-header">
+              <span class="label-xs">SPATIAL PROGRAM</span>
+              <div class="metric-tile-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+              </div>
+            </div>
+            <div>
+              <div class="metric-tile-val-wrap">
+                <span class="metric-tile-val">14</span>
+                <span class="metric-tile-unit">SITES</span>
+              </div>
+              <div class="metric-tile-title">Active Projects</div>
+              <div class="metric-tile-sub">10 in Execution, 4 in Design</div>
+            </div>
+          </div>
+
+          <div class="metric-tile">
+            <div class="metric-tile-header">
+              <span class="label-xs">DRAFTING REPOSITORIES</span>
+              <div class="metric-tile-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              </div>
+            </div>
+            <div>
+              <div class="metric-tile-val-wrap">
+                <span class="metric-tile-val">142</span>
+                <span class="metric-tile-unit">SHEETS</span>
+              </div>
+              <div class="metric-tile-title">Drawings &amp; Blueprints</div>
+              <div class="metric-tile-sub">▲ 18 revised this week</div>
+            </div>
+          </div>
+
+          <div class="metric-tile">
+            <div class="metric-tile-header">
+              <span class="label-xs">CONTRACTOR VERIFICATION</span>
+              <div class="metric-tile-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              </div>
+            </div>
+            <div>
+              <div class="metric-tile-val-wrap">
+                <span class="metric-tile-val">06</span>
+                <span class="metric-tile-unit">AUDITS</span>
+              </div>
+              <div class="metric-tile-title">Pending Site Updates</div>
+              <div class="metric-tile-sub" style="color: var(--status-alert-ink);">! Daily site logs awaiting review</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter and Search Row -->
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+          <div class="search-input-wrap" style="flex:1; max-width: 440px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" class="form-input" placeholder="Search by client name (e.g. Rahul Sharma, phone)...">
+          </div>
+
+          <div class="tab-filter-group">
+            <button class="tab-filter-btn active">ALL PROJECTS (14)</button>
+            <button class="tab-filter-btn">EXECUTION PHASE</button>
+            <button class="tab-filter-btn">DESIGN &amp; APPROVAL</button>
+            <button class="tab-filter-btn">HANDOVER</button>
+          </div>
+        </div>
+
+        <!-- Active Commissions Table -->
+        <div class="folio-card">
+          <div class="folio-card-header">
+            <div>
+              <span class="label-xs">REGISTRY MATRIX</span>
+              <h3 style="font-size: 15px; margin-top: 2px;">Active Commissions Specification</h3>
+            </div>
+            <div style="display:flex; align-items:center; gap: 12px;">
+              <span style="font-size: 12px; color: var(--ink-secondary);">Showing 4 of 14 primary sites</span>
+              <button class="btn btn-icon" title="Export CSV Schedule">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>CLIENT IDENTITY</th>
+                <th>PROJECT &amp; TYPOLOGY</th>
+                <th>EXECUTION STATUS</th>
+                <th>LIVE ARCHITECTURAL DRAFT</th>
+                <th class="align-right">BLUEPRINTS</th>
+                <th class="align-right">SPECS</th>
+                <th>ADMINISTRATIVE ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="commissions-table-body">
+              <!-- Dynamically populated by app.js -->
+            </tbody>
+          </table>
+
+          <div class="table-footer">
+            <span style="font-family: var(--font-display); font-size: 11px; font-weight: 600; color: var(--ink-secondary); letter-spacing: 0.08em;">
+              ATELIER DRAFTING VERSION VERIFICATION ENGINE 2026
+            </span>
+            <div style="display:flex; align-items:center; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" disabled>PREVIOUS</button>
+              <span style="font-size: 11.5px; font-family: var(--font-mono); color: var(--ink-secondary); padding: 0 8px;">Page 1 of 4</span>
+              <button class="btn btn-secondary btn-sm">NEXT</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Split Columns: Recent Submissions & Live Field Site Log -->
+        <div class="split-columns-2">
+          <!-- Recent Drawing Submissions -->
+          <div class="folio-card">
+            <div class="folio-card-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <h3 style="font-size: 14px;">Recent Drawing Submissions</h3>
+              </div>
+              <button class="btn btn-tertiary" style="font-size: 11px;" id="btn-jump-all-blueprints">ALL BLUEPRINTS &gt;</button>
+            </div>
+
+            <div class="folio-card-body" style="padding: 12px 16px;">
+              <!-- Item 1 -->
+              <div style="padding: 12px; border-bottom: 1px solid var(--border-hairline); display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="display:flex; align-items:center; gap: 8px; margin-bottom: 4px;">
+                    <span style="font-weight: 700; font-size: 13.5px; font-family: var(--font-display);">Kitchen Layout &amp; Joinery Details</span>
+                    <span class="badge badge-approved" style="font-size: 9px; height: 20px;">LATEST REVISION</span>
+                  </div>
+                  <div style="font-size: 12px; color: var(--ink-secondary); margin-bottom: 4px;">
+                    Rev 04 - Kapoor Villa, Alibaug • Millwork &amp; Island Detailing
+                  </div>
+                  <div style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-tertiary);">
+                    UPLOADED 2H AGO BY ATELIER STUDIO 01
+                  </div>
+                </div>
+                <div style="display:flex; gap: 6px;">
+                  <button class="btn btn-secondary btn-sm" onclick="showToast('Opening Lightbox for Kitchen Joinery...')">PREVIEW</button>
+                  <button class="btn btn-primary btn-sm" onclick="showToast('Downloading Kitchen Joinery Rev 04 PDF...')">PDF</button>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div style="padding: 12px; border-bottom: 1px solid var(--border-hairline); display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="display:flex; align-items:center; gap: 8px; margin-bottom: 4px;">
+                    <span style="font-weight: 700; font-size: 13.5px; font-family: var(--font-display);">Floor Plan — Master Suite &amp; Terrace</span>
+                    <span class="badge badge-execution" style="font-size: 9px; height: 20px;">REV 03 APPROVED</span>
+                  </div>
+                  <div style="font-size: 12px; color: var(--ink-secondary); margin-bottom: 4px;">
+                    Sharma Residence, 4BHK Juhu • Structural Partitioning Complete
+                  </div>
+                  <div style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-tertiary);">
+                    UPLOADED 5H AGO BY SENIOR ARCHITECT
+                  </div>
+                </div>
+                <div style="display:flex; gap: 6px;">
+                  <button class="btn btn-secondary btn-sm" onclick="showToast('Opening Lightbox for Floor Plan...')">PREVIEW</button>
+                  <button class="btn btn-primary btn-sm" onclick="showToast('Downloading Floor Plan Rev 03 PDF...')">PDF</button>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div style="padding: 12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="display:flex; align-items:center; gap: 8px; margin-bottom: 4px;">
+                    <span style="font-weight: 700; font-size: 13.5px; font-family: var(--font-display);">Electrical &amp; Lighting Layout Schedule</span>
+                    <span class="badge badge-design" style="font-size: 9px; height: 20px;">UNDER REVIEW</span>
+                  </div>
+                  <div style="font-size: 12px; color: var(--ink-secondary); margin-bottom: 4px;">
+                    Mehta Apartment, Bandra • Dimming Zones &amp; Automation Hub
+                  </div>
+                  <div style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-tertiary);">
+                    UPLOADED YESTERDAY BY MEP CONSULTANT
+                  </div>
+                </div>
+                <div style="display:flex; gap: 6px;">
+                  <button class="btn btn-secondary btn-sm" onclick="showToast('Opening Lightbox for Electricals...')">PREVIEW</button>
+                  <button class="btn btn-primary btn-sm" onclick="showToast('Downloading Electrical Schedule PDF...')">PDF</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Site Progress Log -->
+          <div class="folio-card">
+            <div class="folio-card-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                <h3 style="font-size: 14px;">Live Site Progress Log</h3>
+              </div>
+              <span class="badge badge-green" style="font-size: 9.5px;">4 POSTS TODAY</span>
+            </div>
+
+            <div class="folio-card-body" style="padding: 12px 16px;">
+              <!-- Feed Item 1 -->
+              <div style="padding: 12px; border-bottom: 1px solid var(--border-hairline); display:flex; gap: 14px;">
+                <div style="width: 72px; height: 60px; background-color: var(--bg-surface-2); border-radius: 4px; overflow: hidden; position: relative; flex-shrink: 0;">
+                  <img src="assets/reference/media_1791658226127.png" style="width:100%; height:100%; object-fit:cover;" alt="Kitchen carcass"/>
+                  <span style="position:absolute; bottom:2px; right:2px; background:rgba(0,0,0,0.7); color:#FFF; font-size:8px; padding:1px 3px; font-family:var(--font-mono);">1 Photo</span>
+                </div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom: 2px;">
+                    <span class="label-xs" style="color:var(--ink-secondary);">CARPENTRY • MILESTONES</span>
+                    <span style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-secondary);">10:45 AM</span>
+                  </div>
+                  <div style="font-weight: 700; font-size: 13px; margin-bottom: 2px;">Kitchen Cabinet Installation</div>
+                  <div style="font-size: 11.5px; color: var(--ink-secondary); line-height: 1.35;">
+                    Sharma Residence — Carcass alignment verified against Revision 03 drawing...
+                  </div>
+                  <div style="margin-top: 6px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size: 10px; color: var(--ink-tertiary);">Logged by Site Engineer Dave</span>
+                    <button class="btn btn-tertiary btn-sm" style="font-size: 10px; padding: 2px 4px;" onclick="showToast('Opening Inspection Log Dossier...')">INSPECT LOG &gt;</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Feed Item 2 -->
+              <div style="padding: 12px; display:flex; gap: 14px;">
+                <div style="width: 72px; height: 60px; background-color: var(--bg-surface-2); border-radius: 4px; overflow: hidden; position: relative; flex-shrink: 0;">
+                  <img src="assets/reference/media_1791658226190.png" style="width:100%; height:100%; object-fit:cover;" alt="False ceiling"/>
+                  <span style="position:absolute; bottom:2px; right:2px; background:rgba(0,0,0,0.7); color:#FFF; font-size:8px; padding:1px 3px; font-family:var(--font-mono);">4 Photos</span>
+                </div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom: 2px;">
+                    <span class="label-xs" style="color:var(--ink-secondary);">DRYWALL &amp; MEP</span>
+                    <span style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-secondary);">10:15 AM</span>
+                  </div>
+                  <div style="font-weight: 700; font-size: 13px; margin-bottom: 2px;">False Ceiling Framing</div>
+                  <div style="font-size: 11.5px; color: var(--ink-secondary); line-height: 1.35;">
+                    Kapoor Villa — Aluminum grid suspension completed in Great Room salon...
+                  </div>
+                  <div style="margin-top: 6px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size: 10px; color: var(--ink-tertiary);">Logged by Site Supervisor Alex</span>
+                    <button class="btn btn-tertiary btn-sm" style="font-size: 10px; padding: 2px 4px;" onclick="showToast('Opening Inspection Log Dossier...')">INSPECT LOG &gt;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 2: CUSTOMER DIRECTORY & ACCESS CONTROL
+           ================================================================== -->
+      <section id="view-customers" class="view-panel">
+        <div class="view-header">
+          <div class="view-header-titles">
+            <div class="view-header-folio">
+              <span class="badge badge-approved" style="height: 20px;">28 ACTIVE ACCOUNTS</span>
+              <span>AUTHORISED COMMISSIONING LEDGER</span>
+            </div>
+            <h1 class="view-header-title">Customer Directory &amp; Access Control</h1>
+            <p class="view-header-sub">
+              Authorised architectural commissioning ledger, real-time client credentials, spatial permission keys, and synchronised digital drawing distribution schedules.
+            </p>
+          </div>
+
+          <div class="view-header-actions">
+            <button class="btn btn-secondary" onclick="showToast('Generating official encrypted accounts ledger export...')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              EXPORT LEDGER
+            </button>
+            <button class="btn btn-primary" data-open-client-modal>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              + ADD NEW CLIENT
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI Quad Metric Bar -->
+        <div class="metrics-quad-grid">
+          <div class="metric-tile">
+            <span class="label-xs">LIVE PORTALS ACTIVE</span>
+            <div class="metric-tile-val-wrap" style="margin-top: 8px;">
+              <span class="metric-tile-val">24 / 28</span>
+              <span class="badge badge-green" style="font-size: 9px; height: 20px;">85.7%</span>
+            </div>
+            <div class="metric-tile-sub" style="margin-top: 6px;">Single-project isolation active</div>
+          </div>
+
+          <div class="metric-tile">
+            <span class="label-xs">PENDING APPROVALS</span>
+            <div class="metric-tile-val-wrap" style="margin-top: 8px;">
+              <span class="metric-tile-val">06</span>
+              <span class="badge badge-execution" style="font-size: 9px; height: 20px;">2 URGENT</span>
+            </div>
+            <div class="metric-tile-sub" style="margin-top: 6px;">Awaiting client sign-off</div>
+          </div>
+
+          <div class="metric-tile">
+            <span class="label-xs">ACTIVE SITE STREAMS</span>
+            <div class="metric-tile-val-wrap" style="margin-top: 8px;">
+              <span class="metric-tile-val">19</span>
+              <span class="metric-tile-unit">Nodes</span>
+            </div>
+            <div class="metric-tile-sub" style="margin-top: 6px;">Direct photo/audio links</div>
+          </div>
+
+          <div class="metric-tile">
+            <span class="label-xs">STORAGE COMMITTED</span>
+            <div class="metric-tile-val-wrap" style="margin-top: 8px;">
+              <span class="metric-tile-val">412.8</span>
+              <span class="metric-tile-unit">GB</span>
+            </div>
+            <div class="metric-tile-sub" style="margin-top: 6px;">Auto-versioned drawings</div>
+          </div>
+        </div>
+
+        <!-- Filter Chips & Quick Phone Lookup -->
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+          <div class="tab-filter-group">
+            <button class="tab-filter-btn active" data-dir-filter="all">ALL (28)</button>
+            <button class="tab-filter-btn" data-dir-filter="execution">ACTIVE CONSTRUCTION (19)</button>
+            <button class="tab-filter-btn" data-dir-filter="design">DESIGN PHASE (5)</button>
+            <button class="tab-filter-btn" data-dir-filter="handover">READY FOR HANDOVER (4)</button>
+          </div>
+
+          <div class="search-input-wrap" style="min-width: 320px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <input type="text" id="quick-lookup-input" class="form-input" placeholder="Quick lookup index: +91 98201 44521...">
+          </div>
+        </div>
+
+        <!-- Two Column Layout: Cards List (Left) + Client Inspector (Right) -->
+        <div class="customer-directory-layout">
+          <div id="customer-cards-list">
+            <!-- Dynamically populated by app.js -->
+          </div>
+
+          <!-- Inspector Panel -->
+          <div class="client-inspector-panel">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="label-xs">CLIENT INSPECTOR &amp; ACCESS</span>
+              <span class="badge badge-active">ACTIVE PIN</span>
+            </div>
+
+            <div style="margin-top: 14px;">
+              <h2 id="inspector-client-name" style="font-size: 18px; margin-bottom: 2px;">Rahul Sharma</h2>
+              <div id="inspector-project-title" style="font-size: 12px; color: var(--ink-secondary);">
+                Sharma Residence • 4BHK Juhu
+              </div>
+            </div>
+
+            <!-- Quick Action Triggers -->
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+              <button class="btn btn-secondary btn-sm" id="btn-send-drawing-notif" style="justify-content:flex-start;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                Send Drawing Notification (SMS)
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btn-gen-project-bundle" style="justify-content:flex-start;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                Generate Project Bundle (ZIP)
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btn-reset-pin" style="justify-content:flex-start;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Reset Customer PIN / OTP Access
+              </button>
+            </div>
+
+            <!-- Credentials Box -->
+            <div class="inspector-section">
+              <span class="label-xs">AUTHENTICATION METRICS</span>
+              <div class="inspector-tile">
+                <div class="inspector-credential-row">
+                  <span class="credential-key">Portal Username</span>
+                  <span class="credential-val" id="inspector-username">rahul.sharma</span>
+                </div>
+                <div class="inspector-credential-row">
+                  <span class="credential-key">Access Security PIN</span>
+                  <span class="credential-val" id="inspector-pin">•••• [9038]</span>
+                </div>
+                <div class="inspector-credential-row">
+                  <span class="credential-key">Last Client Login</span>
+                  <span class="credential-val" id="inspector-last-login">Today, 09:14 AM</span>
+                </div>
+                <div class="inspector-credential-row">
+                  <span class="credential-key">Drawing Authorization</span>
+                  <span class="credential-val" id="inspector-auth-status">Full Access (14/14)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Audit Activity -->
+            <div class="inspector-section">
+              <span class="label-xs">RECENT CLIENT AUDIT ACTIVITY</span>
+              <div id="inspector-audit-list" style="margin-top: 8px;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <div class="inspector-section" style="background-color:var(--bg-primary); padding:12px; border-radius:4px; margin-top:14px;">
+              <div style="font-size: 11px; font-weight: 700; display:flex; align-items:center; gap:6px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>SAFE-BUILD CLIENT ENFORCEMENT</span>
+              </div>
+              <p style="font-size: 10.5px; color: var(--ink-secondary); margin-top: 4px; line-height: 1.4;">
+                All blueprints displayed in client portal automatically bear dynamic identity watermark and project privacy lock.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 3: DRAWINGS & BLUEPRINT CENTRAL
+           ================================================================== -->
+      <section id="view-blueprints" class="view-panel">
+        <div class="view-header">
+          <div class="view-header-titles">
+            <div class="view-header-folio">
+              <span>FOLIO REGISTRY • SECTION SH-A</span>
+              <span>• SYNCHRONIZED WITH MUMBAI SITE OFFICE</span>
+            </div>
+            <h1 class="view-header-title">Drawings &amp; Blueprint Central</h1>
+            <div style="display:flex; align-items:center; gap: 8px; margin-top: 4px;">
+              <select class="form-select" id="blueprint-project-selector" style="font-weight: 700; font-family: var(--font-display); height: 32px; padding: 0 10px;">
+                <option value="c-rahul">Sharma Residence — 4BHK Juhu (Rahul Sharma)</option>
+                <option value="c-priya">Mehta Apartment — 3BHK Bandra (Priya Mehta)</option>
+                <option value="c-arjun">Kapoor Villa — Coastal Estate (Arjun Kapoor)</option>
+                <option value="c-neha">Patel Residence — Duplex Worli (Neha Patel)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="view-header-actions">
+            <button class="btn btn-primary" data-open-upload-modal>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              + UPLOAD NEW REVISION
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('btn-hero-inspect-vector').click();">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+              QUICK LIGHTBOX
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="tab-filter-group" style="width: 100%; overflow-x: auto;">
+          <button class="tab-filter-btn active" data-blueprint-filter="all">ALL TYPES (14)</button>
+          <button class="tab-filter-btn" data-blueprint-filter="floor-plan">FLOOR PLAN (3)</button>
+          <button class="tab-filter-btn" data-blueprint-filter="furniture">FURNITURE LAYOUT (3)</button>
+          <button class="tab-filter-btn" data-blueprint-filter="electrical">ELECTRICAL LAYOUT (3)</button>
+          <button class="tab-filter-btn" data-blueprint-filter="ceiling">FALSE CEILING (2)</button>
+          <button class="tab-filter-btn" data-blueprint-filter="kitchen">KITCHEN &amp; JOINERY (2)</button>
+          <button class="tab-filter-btn" data-blueprint-filter="wardrobe">WARDROBE (1)</button>
+        </div>
+
+        <!-- Safe Build Protocol Banner -->
+        <div class="safe-build-banner">
+          <div class="safe-build-content">
+            <span class="safe-build-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              SAFE-BUILD PROTOCOL ACTIVE
+            </span>
+            <div class="safe-build-text">
+              Contractors and client portals are strictly locked to <strong>Rev 03 / Rev 04 current site releases</strong>. All superseded drawing versions are permanently watermarked <strong>"SUPERSEDED — NOT FOR CONSTRUCTION"</strong> in the client mobile view.
+            </div>
+          </div>
+          <div style="font-family: var(--font-display); font-size: 11px; font-weight: 700; white-space: nowrap;">
+            CLIENT SYNC: <span style="color: var(--green-indicator);">100% Up to date</span>
+          </div>
+        </div>
+
+        <!-- Processing Pipeline Strip -->
+        <div class="blueprint-pipeline-strip">
+          <div class="cad-dropzone" data-open-upload-modal>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            <div style="font-family: var(--font-display); font-weight: 700; font-size: 13px;">Drag &amp; Drop CAD / DWG / Blueprints</div>
+            <p style="font-size: 11px; color: var(--ink-secondary);">Supports AutoCAD 2010-2026 (.dwg, .dxf) and Vector PDFs up to 150MB</p>
+            <button class="btn btn-secondary btn-sm" style="margin-top: 4px;">BROWSE LOCAL FILES</button>
+          </div>
+
+          <div class="pipeline-status-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="label-xs">AUTO-SYNC INGESTION PIPELINE</span>
+              <span style="font-size: 11px; color: var(--ink-secondary);">Live Worker: Active (24 worker threads)</span>
+            </div>
+
+            <div class="pipeline-steps-bar">
+              <div class="pipeline-step-item completed">
+                <span class="pipeline-step-status">STAGE 01</span>
+                <span class="pipeline-step-title">Upload DWG</span>
+                <span class="pipeline-step-desc">Vector parsing</span>
+              </div>
+              <div class="pipeline-step-item completed">
+                <span class="pipeline-step-status">STAGE 02</span>
+                <span class="pipeline-step-title">Auto-Process</span>
+                <span class="pipeline-step-desc">Layer flattening</span>
+              </div>
+              <div class="pipeline-step-item completed">
+                <span class="pipeline-step-status">STAGE 03</span>
+                <span class="pipeline-step-title">PDF Generated</span>
+                <span class="pipeline-step-desc">Vector 600DPI</span>
+              </div>
+              <div class="pipeline-step-item completed">
+                <span class="pipeline-step-status">STAGE 04</span>
+                <span class="pipeline-step-title">Published Live</span>
+                <span class="pipeline-step-desc">Client push alert</span>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size: 11px; color: var(--ink-secondary);">
+              <span>Latest batch parsed 42 mins ago (4 sheets compiled)</span>
+              <button class="btn btn-tertiary btn-sm" style="font-size: 11px;" onclick="showToast('Displaying real-time compilation log...')">VIEW PROCESSING LOGS &gt;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Hero Blueprint Sheet: SHEET A-101 -->
+        <div class="folio-card" id="hero-drawing-sheet">
+          <div class="folio-card-header">
+            <div style="display:flex; align-items:center; gap: 12px;">
+              <span class="label-xs" style="background:#111; color:#FFF; padding:2px 6px; border-radius:2px;">SHEET A-101</span>
+              <h2 style="font-size: 16px;">Floor Plan — Master Layout &amp; Balcony Structural Offsets</h2>
+              <span class="badge badge-approved">REVISION 03 [ACTIVE ON SITE]</span>
+            </div>
+            <div style="font-size: 11px; color: var(--ink-secondary); font-family: var(--font-mono);">
+              Updated 24 Sep 2026 • 14:15 IST
+            </div>
+          </div>
+
+          <div class="folio-card-body">
+            <div style="display:grid; grid-template-columns: 280px 1fr; gap: 24px; align-items:start;">
+              <!-- Mini drawing thumbnail -->
+              <div style="border: 1px solid var(--border-hairline); border-radius: 4px; overflow: hidden; background: #FAF8F5;">
+                <img src="assets/blueprints/blueprint-a101-rev03.svg" style="width:100%; height:180px; object-fit:cover;" alt="A-101 drawing" />
+                <div style="padding: 10px; background: var(--bg-surface-1); border-top: 1px solid var(--border-hairline); font-size: 11px;">
+                  <div style="font-weight: 700;">Scale: 1:50 @ A1</div>
+                  <div style="color: var(--ink-secondary); font-family: var(--font-mono);">SHARMA_FL_03_FINAL.DWG</div>
+                </div>
+              </div>
+
+              <div>
+                <p style="font-size: 13.5px; line-height: 1.5; margin-bottom: 14px;">
+                  Adjusted master bedroom balcony structural offsets to clear vertical plumbing chase as surveyed on 23 Sep. Door swings and partitions sealed for execution.
+                </p>
+
+                <div style="display:flex; gap: 10px; margin-bottom: 20px;">
+                  <button class="btn btn-secondary" id="btn-hero-inspect-vector">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    INSPECT VECTOR
+                  </button>
+                  <button class="btn btn-secondary" id="btn-hero-redline-diff">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1"></path><path d="M18 8h4a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4"></path></svg>
+                    VIEW REDLINE DIFF (REV 03 VS 02)
+                  </button>
+                  <button class="btn btn-primary" id="btn-hero-download-pdf">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    DOWNLOAD PDF
+                  </button>
+                </div>
+
+                <!-- Document Change Registry & Audit Trail -->
+                <div style="border-top: 1px solid var(--border-hairline); padding-top: 14px;">
+                  <span class="label-xs" style="margin-bottom: 10px; display:block;">DOCUMENT CHANGE REGISTRY &amp; AUDIT TRAIL</span>
+                  
+                  <!-- Rev 03 -->
+                  <div style="padding: 10px 14px; background: var(--bg-surface-1); border: 1px solid var(--border-hairline); border-radius: 4px; margin-bottom: 8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+                      <div style="display:flex; align-items:center; gap: 8px;">
+                        <span class="badge badge-approved" style="height: 18px; font-size: 9px;">REV 03 (CURRENT)</span>
+                        <strong style="font-size: 12.5px;">Balcony Structural Offsets &amp; Column Re-centering</strong>
+                      </div>
+                      <span style="font-size: 10.5px; font-family: var(--font-mono); color: var(--ink-secondary);">Uploaded 24 Sep 2026 by Ar. Sameer V.</span>
+                    </div>
+                    <div style="font-size: 11.5px; color: var(--ink-secondary);">
+                      "Adjusted master bedroom balcony structural offsets per contractor request on casting day. Approved by Structural Consultant."
+                    </div>
+                  </div>
+
+                  <!-- Rev 02 -->
+                  <div style="padding: 10px 14px; background: var(--bg-primary); border: 1px solid var(--border-hairline); border-radius: 4px; margin-bottom: 8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+                      <div style="display:flex; align-items:center; gap: 8px;">
+                        <span class="badge badge-review" style="height: 18px; font-size: 9px;">REV 02 (SUPERSEDED)</span>
+                        <span style="font-size: 12.5px; font-weight: 600;">Client Approved Revised Foyer &amp; Walk-in Wardrobe Passage</span>
+                      </div>
+                      <span style="font-size: 10.5px; font-family: var(--font-mono); color: var(--ink-secondary);">Uploaded 10 Sep 2026</span>
+                    </div>
+                    <div style="font-size: 11.5px; color: var(--ink-secondary);">
+                      "Client approved revised foyer dimensions and consolidated electrical conduit routing in foyer vestibule."
+                    </div>
+                  </div>
+
+                  <!-- Rev 01 -->
+                  <div style="padding: 10px 14px; background: var(--bg-primary); border: 1px solid var(--border-hairline); border-radius: 4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+                      <div style="display:flex; align-items:center; gap: 8px;">
+                        <span class="badge badge-review" style="height: 18px; font-size: 9px;">REV 01 (SUPERSEDED)</span>
+                        <span style="font-size: 12.5px; font-weight: 600;">Initial Schematic Layout &amp; Demolition Plan</span>
+                      </div>
+                      <span style="font-size: 10.5px; font-family: var(--font-mono); color: var(--ink-secondary);">Uploaded 15 Aug 2026</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Registered Drawing Sheets Grid -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+            <h3 style="font-size: 16px;">Registered Drawing Sheets (Sharma Residence)</h3>
+            <span style="font-size: 12px; color: var(--ink-secondary);">Showing 6 active site-ready technical sets</span>
+          </div>
+
+          <div class="blueprints-grid" id="blueprints-grid-container">
+            <!-- Dynamically populated by app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 4: AUTHENTICATED CLIENT PORTAL (SHARMA RESIDENCE)
+           ================================================================== -->
+      <section id="view-portal" class="view-panel">
+        <!-- Client Auth Notification Bar -->
+        <div class="client-portal-header-bar">
+          <div style="display:flex; align-items:center; gap: 10px;">
+            <span style="width:7px; height:7px; border-radius:50%; background:#2B7A4B;"></span>
+            <span>AUTHENTICATED CLIENT PORTAL — WELCOME, RAHUL SHARMA</span>
+          </div>
+          <div style="display:flex; align-items:center; gap: 16px;">
+            <span style="color:#C8BEB2;">🔒 LOGGED IN VIA REGISTERED PHONE +91 98201 44521 • SINGLE-PROJECT PRIVACY LOCK ACTIVE</span>
+            <button class="btn btn-secondary btn-sm" id="btn-return-studio" style="background:#FFF; color:#111;">
+              RETURN TO STUDIO &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Project Hero Folio -->
+        <div class="client-hero-folio">
+          <div>
+            <div class="client-hero-badges">
+              <span class="badge badge-approved" id="portal-ref-badge">REF: AT-JHU-404</span>
+              <span class="badge badge-execution">RESIDENTIAL LUXURY FITOUT</span>
+              <span class="badge badge-review" id="portal-vault-badge">VAULT KEY: PR0231</span>
+            </div>
+            <h1 class="client-hero-title" id="portal-residence-title">SHARMA RESIDENCE</h1>
+            <div class="client-hero-location">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span id="portal-residence-loc">4BHK Apartment, 14th Road, Juhu, Mumbai</span>
+            </div>
+          </div>
+
+          <div class="client-hero-stats">
+            <div class="client-hero-stat-box">
+              <span class="label-xs">EXECUTION STATUS</span>
+              <div style="font-weight: 700; font-size: 14px; margin: 4px 0;" id="portal-phase-text">
+                ● Phase 2 — Joinery &amp; Electricals
+              </div>
+              <div style="font-size: 11.5px; color: var(--ink-secondary);" id="portal-sprint-pct">
+                Overall Sprint: 64% Complete
+              </div>
+            </div>
+
+            <div class="client-hero-stat-box">
+              <span class="label-xs">LEAD ARCHITECT</span>
+              <div style="font-weight: 700; font-size: 14px; margin: 4px 0;" id="portal-lead-arch">Sameer Verma</div>
+              <div style="font-size: 11.5px; color: var(--ink-secondary);">Direct Desk Ext: #104</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subnav tabs -->
+        <div class="client-subnav-bar">
+          <div class="client-nav-tabs">
+            <button class="client-tab-link active">OVERVIEW</button>
+            <button class="client-tab-link">MY DRAWINGS &amp; BLUEPRINTS (14)</button>
+            <button class="client-tab-link">PROJECT DOCUMENTS (8)</button>
+            <button class="client-tab-link">SITE PROGRESS UPDATES (19)</button>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="showToast('Calling Atelier Client Liaison...')">
+            CONTACT ATELIER TEAM
+          </button>
+        </div>
+
+        <!-- Section: Latest Approved Drawings -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+            <div>
+              <span class="label-xs">ARCHITECTURAL DOCUMENTATION • READY FOR SITE EXECUTION</span>
+              <h2 style="font-size: 18px; margin-top: 2px;">LATEST APPROVED DRAWINGS</h2>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="showToast('Downloading all 14 official drawings archive (.ZIP)...')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              DOWNLOAD ALL REVISIONS (ZIP)
+            </button>
+          </div>
+
+          <div class="blueprints-grid">
+            <!-- Sheet 1 -->
+            <div class="blueprint-card">
+              <div class="blueprint-card-preview">
+                <span class="blueprint-sheet-tag">REV 03</span>
+                <img src="assets/blueprints/blueprint-a101-rev03.svg" alt="Floor plan preview"/>
+              </div>
+              <div class="blueprint-card-meta">
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span class="label-xs">ARCH-PLAN-01</span>
+                    <span class="badge badge-approved" style="font-size:9px; height:18px;">LATEST REVISION</span>
+                  </div>
+                  <h4 style="font-size:14px; margin-bottom:4px;">Floor Plan — Architectural Layout</h4>
+                  <p style="font-size:12px; color:var(--ink-secondary);">General masonry, spatial partitions &amp; door swing radiuses.</p>
+                </div>
+                <div style="margin-top:10px; font-size:11px; color:var(--ink-secondary); font-family:var(--font-mono);">
+                  UPDATED 24 SEP 2026
+                </div>
+              </div>
+              <div class="blueprint-card-footer">
+                <button class="btn btn-secondary btn-sm" onclick="document.getElementById('btn-hero-inspect-vector').click();">PREVIEW DRAWING</button>
+                <button class="btn btn-primary btn-sm" onclick="showToast('Downloading Official Floor Plan PDF...')">DOWNLOAD OFFICIAL PDF</button>
+              </div>
+            </div>
+
+            <!-- Sheet 2 -->
+            <div class="blueprint-card">
+              <div class="blueprint-card-preview">
+                <span class="blueprint-sheet-tag">REV 04</span>
+                <img src="assets/blueprints/blueprint-k201.svg" alt="Kitchen layout"/>
+              </div>
+              <div class="blueprint-card-meta">
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span class="label-xs">MILL-KIT-04</span>
+                    <span class="badge badge-approved" style="font-size:9px; height:18px;">LATEST REVISION</span>
+                  </div>
+                  <h4 style="font-size:14px; margin-bottom:4px;">Kitchen Layout &amp; Modular Cabinetry</h4>
+                  <p style="font-size:12px; color:var(--ink-secondary);">Island counter elevations, carcass depths &amp; chimney shaft.</p>
+                </div>
+                <div style="margin-top:10px; font-size:11px; color:var(--ink-secondary); font-family:var(--font-mono);">
+                  UPDATED 24 SEP 2026
+                </div>
+              </div>
+              <div class="blueprint-card-footer">
+                <button class="btn btn-secondary btn-sm" onclick="showToast('Opening Lightbox for Kitchen Joinery...')">PREVIEW DRAWING</button>
+                <button class="btn btn-primary btn-sm" onclick="showToast('Downloading Official Kitchen Joinery PDF...')">DOWNLOAD OFFICIAL PDF</button>
+              </div>
+            </div>
+
+            <!-- Sheet 3 -->
+            <div class="blueprint-card">
+              <div class="blueprint-card-preview">
+                <span class="blueprint-sheet-tag">REV 02</span>
+                <img src="assets/blueprints/blueprint-a101-rev03.svg" alt="Furniture layout"/>
+              </div>
+              <div class="blueprint-card-meta">
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span class="label-xs">INT-FURN-02</span>
+                    <span class="badge badge-approved" style="font-size:9px; height:18px;">LATEST REVISION</span>
+                  </div>
+                  <h4 style="font-size:14px; margin-bottom:4px;">Furniture &amp; Millwork Plan</h4>
+                  <p style="font-size:12px; color:var(--ink-secondary);">Master suite wardrobe profiles, fluted wall accents &amp; vanities.</p>
+                </div>
+                <div style="margin-top:10px; font-size:11px; color:var(--ink-secondary); font-family:var(--font-mono);">
+                  UPDATED 22 SEP 2026
+                </div>
+              </div>
+              <div class="blueprint-card-footer">
+                <button class="btn btn-secondary btn-sm" onclick="showToast('Opening Lightbox for Furniture Plan...')">PREVIEW DRAWING</button>
+                <button class="btn btn-primary btn-sm" onclick="showToast('Downloading Official Furniture Plan PDF...')">DOWNLOAD OFFICIAL PDF</button>
+              </div>
+            </div>
+
+            <!-- Sheet 4 -->
+            <div class="blueprint-card">
+              <div class="blueprint-card-preview">
+                <span class="blueprint-sheet-tag">REV 02</span>
+                <img src="assets/blueprints/blueprint-k201.svg" alt="False ceiling"/>
+              </div>
+              <div class="blueprint-card-meta">
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span class="label-xs">ELEC-LGT-02</span>
+                    <span class="badge badge-approved" style="font-size:9px; height:18px;">LATEST REVISION</span>
+                  </div>
+                  <h4 style="font-size:14px; margin-bottom:4px;">False Ceiling &amp; Ambient Lighting</h4>
+                  <p style="font-size:12px; color:var(--ink-secondary);">Reflected ceiling layout, magnetic track feeds &amp; coves.</p>
+                </div>
+                <div style="margin-top:10px; font-size:11px; color:var(--ink-secondary); font-family:var(--font-mono);">
+                  UPDATED 20 SEP 2026
+                </div>
+              </div>
+              <div class="blueprint-card-footer">
+                <button class="btn btn-secondary btn-sm" onclick="showToast('Opening Lightbox for Ceiling & Lighting...')">PREVIEW DRAWING</button>
+                <button class="btn btn-primary btn-sm" onclick="showToast('Downloading Official Lighting Plan PDF...')">DOWNLOAD OFFICIAL PDF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Daily Field Verifications & Project Specs Split -->
+        <div class="split-columns-2" style="margin-top: 14px;">
+          <!-- Left: Live Site Work Updates -->
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+              <div>
+                <span class="label-xs">DAILY FIELD VERIFICATIONS</span>
+                <h2 style="font-size: 18px; margin-top: 2px;">LIVE SITE WORK UPDATES</h2>
+              </div>
+              <span class="badge badge-green">● LIVE FIELD FEED</span>
+            </div>
+
+            <!-- Site Post 1: Kitchen Cabinetry -->
+            <div class="site-feed-post">
+              <div class="site-feed-post-header">
+                <div style="display:flex; align-items:center; gap: 8px;">
+                  <span style="width:6px; height:6px; border-radius:50%; background:#111;"></span>
+                  <strong style="font-size: 13.5px;">Kitchen Cabinetry &amp; Carcass Installation</strong>
+                </div>
+                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--ink-secondary);">24 SEP 2026 • 17:30 IST</span>
+              </div>
+              <div class="site-feed-post-body">
+                <p style="font-size: 13px; color: var(--ink-primary); line-height: 1.45; margin-bottom: 12px;">
+                  Carcass assembly completed in dry kitchen; counter quartz templating scheduled for tomorrow. Marine ply framing inspected by Project Engineer for exact 90-degree plumb alignments. All Blum soft-close runners pre-fitted.
+                </p>
+
+                <div class="site-feed-photos-row">
+                  <div class="site-feed-photo-item">
+                    <img src="assets/reference/media_1791658226127.png" alt="Dry Kitchen Frame Alignment" />
+                    <div class="site-photo-caption-bar">
+                      <span>Dry Kitchen Frame Alignment</span>
+                      <span>[⛶]</span>
+                    </div>
+                  </div>
+                  <div class="site-feed-photo-item">
+                    <img src="assets/reference/media_1791658226034.png" alt="Quartz Support Bracing" />
+                    <div class="site-photo-caption-bar">
+                      <span>Quartz Support Bracing</span>
+                      <span>[⛶]</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="site-feed-post-footer">
+                <span>LOGGED BY: DINESH SOLANKI (SITE SUPERVISOR)</span>
+                <span style="color: var(--green-indicator); font-weight: 700;">QUALITY CLEARANCE: PASSED ✓</span>
+              </div>
+            </div>
+
+            <!-- Site Post 2: Electrical Conduit Routing -->
+            <div class="site-feed-post">
+              <div class="site-feed-post-header">
+                <div style="display:flex; align-items:center; gap: 8px;">
+                  <span style="width:6px; height:6px; border-radius:50%; background:#111;"></span>
+                  <strong style="font-size: 13.5px;">Electrical Conduit Routing &amp; POP Coving</strong>
+                </div>
+                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--ink-secondary);">21 SEP 2026 • 14:15 IST</span>
+              </div>
+              <div class="site-feed-post-body">
+                <p style="font-size: 13px; color: var(--ink-primary); line-height: 1.45; margin-bottom: 12px;">
+                  Concealed wiring tested for master suite lighting points. Fire-retardant FRLS grade cables pulled through heavy-duty PVC conduits. Ceiling coving framework locked in place awaiting first coat skim finishing.
+                </p>
+
+                <div style="background:var(--bg-surface-1); border:1px solid var(--border-hairline); border-radius:4px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+                  <div style="display:flex; align-items:center; gap: 8px; font-size: 12px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                    <span>Megger Insulation Resistance Test: <strong>120 MΩ [Standard Compliant]</strong></span>
+                  </div>
+                  <span class="badge badge-green" style="font-size: 9px; height: 18px;">VERIFIED</span>
+                </div>
+              </div>
+              <div class="site-feed-post-footer">
+                <span>LOGGED BY: SAMEER VERMA (LEAD ARCHITECT)</span>
+                <button class="btn btn-tertiary btn-sm" style="font-size: 11px;" onclick="showToast('Displaying full Megger test raw log...')">View Full Inspection Log &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Project Specifications & Custodian Card -->
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+              <div>
+                <span class="label-xs">CLIENT REPOSITORY</span>
+                <h2 style="font-size: 18px; margin-top: 2px;">PROJECT SPECIFICATIONS &amp; CONTRACTS</h2>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap: 12px; margin-bottom: 24px;">
+              <!-- Doc 1 -->
+              <div style="background:var(--bg-surface-1); border:1px solid var(--border-hairline); border-radius:4px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap: 12px;">
+                  <div style="width:36px; height:36px; background:#111; color:#FFF; display:flex; align-items:center; justify-content:center; border-radius:4px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <div style="font-weight:700; font-size:13.5px;">Interior Estimate V2.pdf</div>
+                    <div style="font-size:11px; color:var(--ink-secondary);">1.8 MB • APPROVED &amp; EXECUTED</div>
+                  </div>
+                </div>
+                <button class="btn btn-icon" onclick="showToast('Downloading Interior Estimate V2.pdf...')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+              </div>
+
+              <!-- Doc 2 -->
+              <div style="background:var(--bg-surface-1); border:1px solid var(--border-hairline); border-radius:4px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap: 12px;">
+                  <div style="width:36px; height:36px; background:#E8DED0; color:#111; display:flex; align-items:center; justify-content:center; border-radius:4px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+                  </div>
+                  <div>
+                    <div style="font-weight:700; font-size:13.5px;">Italian Marble Schedule.pdf</div>
+                    <div style="font-size:11px; color:var(--ink-secondary);">3.4 MB • BATU GRIGIO &amp; STATUARIO</div>
+                  </div>
+                </div>
+                <button class="btn btn-icon" onclick="showToast('Downloading Italian Marble Schedule.pdf...')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+              </div>
+
+              <!-- Doc 3 -->
+              <div style="background:var(--bg-surface-1); border:1px solid var(--border-hairline); border-radius:4px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap: 12px;">
+                  <div style="width:36px; height:36px; background:#D8C9B8; color:#111; display:flex; align-items:center; justify-content:center; border-radius:4px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                  </div>
+                  <div>
+                    <div style="font-weight:700; font-size:13.5px;">Modular Kitchen Hardware Warr...</div>
+                    <div style="font-size:11px; color:var(--ink-secondary);">680 KB • 10-YR BLUM CERTIFICATE</div>
+                  </div>
+                </div>
+                <button class="btn btn-icon" onclick="showToast('Downloading Blum Hardware Warranty Certificate...')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+              </div>
+
+              <button class="btn btn-secondary" style="width:100%;" onclick="showToast('Opening complete encrypted archive of 8 project specifications...')">
+                OPEN COMPLETE DOCUMENT ARCHIVE (8 FILES)
+              </button>
+            </div>
+
+            <!-- Assigned Atelier Custodian Card -->
+            <div class="custodian-card">
+              <span class="label-xs" style="margin-bottom: 12px; display:block;">ASSIGNED ATELIER CUSTODIAN</span>
+              <div class="custodian-profile-row">
+                <div class="user-avatar-badge" style="width:42px; height:42px; font-size:14px;">SV</div>
+                <div>
+                  <h4 style="font-size:15px; margin-bottom:2px;">Sameer Verma</h4>
+                  <div style="font-size:12px; color:var(--ink-secondary);">Partner &amp; Lead Technical Director</div>
+                  <div style="font-size:11px; font-family:var(--font-mono); color:var(--ink-primary); margin-top:2px;">DIRECT: +91 98200 11200</div>
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button class="btn btn-secondary btn-sm" onclick="showToast('Connecting call to Ar. Sameer Verma (+91 98200 11200)...')">DIRECT CALL</button>
+                <button class="btn btn-primary btn-sm" onclick="showToast('Requesting callback from Lead Architect...')">REQUEST CALL</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer style="margin-top: 40px; border-top: 1px solid var(--border-hairline); padding-top: 24px; display:flex; justify-content:space-between; align-items:center; font-size:11.5px; color:var(--ink-secondary);">
+          <div>
+            <strong>ATELIER CONTRACTING</strong> — Precision Architectural Construction &amp; Interior Direction
+          </div>
+          <div style="display:flex; gap: 16px;">
+            <span>STUDIO DIRECTORY</span>
+            <span>MATERIAL ARCHIVES</span>
+            <span>COMPLIANCE &amp; LICENSURE</span>
+            <span>© 2026 Atelier Contracting Ltd.</span>
+          </div>
+        </footer>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ======================================================================
+     MODALS
+     ====================================================================== -->
+
+<!-- 1. LIGHTBOX / VECTOR BLUEPRINT & REDLINE DIFF INSPECTOR -->
+<div id="lightbox-modal" class="modal-overlay">
+  <div class="modal-sheet lightbox-sheet">
+    <div class="modal-header">
+      <div style="display:flex; align-items:center; gap: 12px;">
+        <span class="label-xs" style="background:#111; color:#FFF; padding:2px 6px; border-radius:2px;">VECTOR INSPECTOR</span>
+        <h3 id="lightbox-sheet-title">SHEET A-101 — Floor Plan</h3>
+        <span class="badge badge-approved" id="lightbox-sheet-rev">REV 03 [ACTIVE]</span>
+      </div>
+      <button class="btn btn-icon" id="btn-close-lightbox" title="Close Lightbox">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <div class="modal-body" style="padding: 12px;">
+      <div class="lightbox-viewport">
+        <div id="lightbox-canvas-target" class="lightbox-canvas">
+          <!-- Populated by app.js -->
+        </div>
+
+        <div class="lightbox-toolbar">
+          <button class="btn btn-icon" id="lightbox-zoom-out" title="Zoom Out">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </button>
+          <button class="btn btn-icon" id="lightbox-zoom-reset" title="Reset View">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          </button>
+          <button class="btn btn-icon" id="lightbox-zoom-in" title="Zoom In">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </button>
+          <div style="width:1px; height:20px; background:var(--border-hairline);"></div>
+          <button class="btn btn-secondary btn-sm" id="btn-toggle-redline-diff">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            TOGGLE REDLINE DIFF (REV 03 VS 02)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <span style="font-size: 11.5px; color: var(--ink-secondary); margin-right: auto; font-family: var(--font-mono);">
+        AutoCAD 2026 DWG Vector • Precision Engine 600 DPI • Verified Safe-Build Lock
+      </span>
+      <button class="btn btn-secondary btn-sm" onclick="showToast('Exporting high-resolution vector PDF...')">EXPORT PDF</button>
+      <button class="btn btn-primary btn-sm" onclick="showToast('Downloading AutoCAD 2026 DWG source package...')">DOWNLOAD DWG CAD</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. UPLOAD DRAWING MODAL -->
+<div id="upload-modal" class="modal-overlay">
+  <div class="modal-sheet" style="max-width: 540px;">
+    <div class="modal-header">
+      <div>
+        <span class="label-xs">INGESTION ENGINE</span>
+        <h3 style="font-size: 16px; margin-top: 2px;">Upload New Drawing Revision</h3>
+      </div>
+      <button class="btn btn-icon" id="btn-close-upload">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <form id="drawing-upload-form">
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:16px;">
+        <div class="cad-dropzone" style="padding: 24px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <div style="font-weight:700; font-family:var(--font-display); font-size:13px;">Drop .DWG, .DXF or Vector .PDF here</div>
+          <span style="font-size:11px; color:var(--ink-secondary);">Maximum file payload: 150MB</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target Project Folio</label>
+          <select class="form-select">
+            <option>Sharma Residence — 4BHK Juhu (Rahul Sharma)</option>
+            <option>Kapoor Villa — Coastal Estate (Arjun Kapoor)</option>
+            <option>Mehta Apartment — 3BHK Bandra (Priya Mehta)</option>
+            <option>Patel Residence — Duplex Worli (Neha Patel)</option>
+          </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Drawing Sheet Title</label>
+            <input type="text" id="input-upload-sheet-name" class="form-input" value="Floor Plan — Master Suite" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Revision</label>
+            <input type="text" id="input-upload-rev" class="form-input" value="REV 04" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Revision Justification &amp; Redline Summary</label>
+          <textarea class="form-textarea" placeholder="Detail any offset adjustments, client concessions, or contractor site changes..."></textarea>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+          <input type="checkbox" id="check-watermark" checked style="width:16px; height:16px; accent-color:#111;">
+          <label for="check-watermark" style="font-size:12px; color:var(--ink-primary);">Automatically apply Safe-Build watermark &amp; notify client</label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('upload-modal').classList.remove('active')">CANCEL</button>
+        <button type="submit" class="btn btn-primary">REGISTER REVISION</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 3. ADD CLIENT MODAL -->
+<div id="add-client-modal" class="modal-overlay">
+  <div class="modal-sheet" style="max-width: 520px;">
+    <div class="modal-header">
+      <div>
+        <span class="label-xs">PORTFOLIO REGISTRATION</span>
+        <h3 style="font-size: 16px; margin-top: 2px;">Commission New Client Account</h3>
+      </div>
+      <button class="btn btn-icon" id="btn-close-add-client">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <form id="add-client-form">
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+        <div class="form-group">
+          <label class="form-label">Client Full Name</label>
+          <input type="text" id="input-new-client-name" class="form-input" placeholder="e.g. Vikram Singhania" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Project / Residence Title</label>
+          <input type="text" id="input-new-project-title" class="form-input" placeholder="e.g. Singhania Villa, Malabar Hill" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Primary Mobile (OTP Portal Key)</label>
+          <input type="tel" id="input-new-client-phone" class="form-input" placeholder="+91 98200 00000" required>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="form-label">Built-up Area (Sq Ft)</label>
+            <input type="number" class="form-input" placeholder="4200">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Lead Architect</label>
+            <select class="form-select">
+              <option>Sameer Verma</option>
+              <option>Julian Vane</option>
+              <option>Tanvi K.</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('add-client-modal').classList.remove('active')">CANCEL</button>
+        <button type="submit" class="btn btn-primary">COMMISSION FOLIO</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- Scripts -->
+<script src="scripts/data.js"></script>
+<script src="scripts/app.js"></script>
+
+</body>
+</html>
