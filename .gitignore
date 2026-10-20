@@ -27,3 +27,6 @@ database/
 # Test output
 test-results/
 playwright-report/
+
+# Other local tool folders
+.codex/

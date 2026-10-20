@@ -42,3 +42,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.documents;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.projects;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.clients;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.site_log_photos;
+
+-- 5. Work-location folders (Mumbai, Bihar, ...)
+ALTER TABLE public.drawing_sheets ADD COLUMN IF NOT EXISTS location TEXT;
+CREATE INDEX IF NOT EXISTS drawing_sheets_project_location_idx ON public.drawing_sheets (project_id, location);

@@ -45,6 +45,7 @@ export const drawingsService = {
     title: string;
     category: DrawingSheet['category'];
     description: string;
+    location?: string;
   }): Promise<DrawingSheet> {
     if (isSupabaseConfigured) {
       const created = await sbDrawings.createSheet(data);
@@ -60,6 +61,7 @@ export const drawingsService = {
       category: data.category,
       categoryLabel: data.category.toUpperCase().replace('-', ' '),
       description: data.description,
+      location: data.location,
       currentRev: 'REV 01',
       scale: '1:50 @ A1',
       updatedDate: new Date().toLocaleDateString()

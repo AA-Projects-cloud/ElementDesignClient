@@ -13,6 +13,8 @@ export const UploadDrawingModal: React.FC = () => {
   const queryClient = useQueryClient();
 
   const [selectedProjectId, setSelectedProjectId] = useState<string>('');
+  const [locChoice, setLocChoice] = useState('');
+  const [newLocation, setNewLocation] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [sheetTitle, setSheetTitle] = useState('');
@@ -52,6 +54,18 @@ export const UploadDrawingModal: React.FC = () => {
     ? matchedProjects.find((p) => p.id === selectedProjectId)?.id || matchedProjects[0]?.id
     : selectedProjectId || projects[0]?.id;
 
+  // Existing work-location folders for the project this file will be filed under
+  const { data: projectSheets = [] } = useQuery({
+    queryKey: ['sheets', resolvedProjectId],
+    queryFn: () => drawingsService.getSheets(resolvedProjectId),
+    enabled: Boolean(resolvedProjectId),
+  });
+  const existingLocations = Array.from(
+    new Set(projectSheets.map((s) => s.location?.trim()).filter((l): l is string => Boolean(l)))
+  );
+  const usingNewLocation = existingLocations.length === 0 || locChoice === '__new__';
+  const effectiveLocation = usingNewLocation ? newLocation.trim() : locChoice || existingLocations[0];
+
   const uploadMutation = useMutation({
     mutationFn: async () => {
       if (!file) throw new Error('Please select a PDF, image or video file');
@@ -61,9 +75,16 @@ export const UploadDrawingModal: React.FC = () => {
       const targetProjectId = resolvedProjectId;
       if (!targetProjectId) throw new Error('No project found');
 
-      // Check if sheet exists or create new
+      if (!effectiveLocation) throw new Error('Please choose or enter the work location for this file.');
+      // Reuse the folder's spelling if it already exists (Mumbai vs mumbai)
+      const location =
+        existingLocations.find((l) => l.toLowerCase() === effectiveLocation.toLowerCase()) || effectiveLocation;
+
+      // Check if this sheet already exists in this location, or create it
       const existingSheets = await drawingsService.getSheets(targetProjectId);
-      let targetSheet = existingSheets.find((s) => s.code === sheetCode);
+      let targetSheet = existingSheets.find(
+        (s) => s.code === sheetCode && (s.location?.trim() || '').toLowerCase() === location.toLowerCase()
+      );
 
       if (!targetSheet) {
         targetSheet = await drawingsService.createSheet({
@@ -72,6 +93,7 @@ export const UploadDrawingModal: React.FC = () => {
           title: sheetTitle,
           category,
           description: note,
+          location,
         });
       }
 
@@ -94,6 +116,8 @@ export const UploadDrawingModal: React.FC = () => {
       setNote('');
       setCustomerName('');
       setCustomerPhone('');
+      setLocChoice('');
+      setNewLocation('');
       setUploadProgress(0);
       addToast(`${sheetCode} (${revNo}) uploaded and published to the client portal.`, 'success');
     },
@@ -238,6 +262,38 @@ export const UploadDrawingModal: React.FC = () => {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Work Location (Customer Folder)</label>
+              {existingLocations.length > 0 && (
+                <select
+                  className="form-select"
+                  value={usingNewLocation ? '__new__' : locChoice || existingLocations[0]}
+                  onChange={(e) => setLocChoice(e.target.value)}
+                >
+                  {existingLocations.map((l) => (
+                    <option key={l} value={l}>
+                      {l}
+                    </option>
+                  ))}
+                  <option value="__new__">+ Add a new location...</option>
+                </select>
+              )}
+              {usingNewLocation && (
+                <input
+                  type="text"
+                  className="form-input"
+                  value={newLocation}
+                  onChange={(e) => setNewLocation(e.target.value)}
+                  placeholder="e.g. Mumbai, Bihar, Pune"
+                  style={existingLocations.length > 0 ? { marginTop: 8 } : undefined}
+                  required
+                />
+              )}
+              <span style={{ fontSize: 11, color: 'var(--ink-secondary)' }}>
+                The customer sees this file inside this location's folder in their dashboard.
+              </span>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>

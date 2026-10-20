@@ -80,6 +80,7 @@ const mapSheet = (r: any): DrawingSheet => {
     category: r.category,
     categoryLabel: String(r.category).toUpperCase().replace('-', ' '),
     description: r.description ?? '',
+    location: r.location ?? undefined,
     currentRev: current?.revNo,
     scale: current?.scale,
     updatedDate: current ? new Date(current.createdAt).toLocaleDateString() : undefined,
@@ -323,21 +324,24 @@ export const sbDrawings = {
     title: string;
     category: DrawingSheet['category'];
     description: string;
+    location?: string;
   }): Promise<DrawingSheet> {
-    const row = unwrap<any>(
-      await supabase
-        .from('drawing_sheets')
-        .insert({
-          project_id: data.projectId,
-          code: data.code,
-          title: data.title,
-          category: data.category,
-          description: data.description,
-        })
-        .select('*, revisions(*)')
-        .single()
-    );
-    return mapSheet(row);
+    const res = await supabase
+      .from('drawing_sheets')
+      .insert({
+        project_id: data.projectId,
+        code: data.code,
+        title: data.title,
+        category: data.category,
+        description: data.description,
+        location: data.location ?? null,
+      })
+      .select('*, revisions(*)')
+      .single();
+    if (res.error && /location/i.test(res.error.message)) {
+      throw new Error('The database needs one small update for work locations. Run the location setup SQL in Supabase, then try again.');
+    }
+    return mapSheet(unwrap<any>(res));
   },
 
   async uploadRevision(data: {

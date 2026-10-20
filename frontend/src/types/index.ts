@@ -73,6 +73,7 @@ export interface DrawingSheet {
   category: 'floor-plan' | 'furniture' | 'electrical' | 'ceiling' | 'kitchen' | 'wardrobe' | 'hvac' | 'structural';
   categoryLabel?: string;
   description: string;
+  location?: string; // work location folder (e.g. Mumbai, Bihar)
   currentRev?: string;
   scale?: string;
   updatedDate?: string;

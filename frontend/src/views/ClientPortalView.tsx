@@ -20,6 +20,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Check,
+  FolderOpen,
 } from 'lucide-react';
 
 export const ClientPortalView: React.FC = () => {
@@ -74,6 +75,18 @@ export const ClientPortalView: React.FC = () => {
 
   // Only show sheets that actually have an uploaded file.
   const sheets = allSheets.filter((sh) => (sh.revisions?.length ?? 0) > 0);
+
+  // Work-location folders (e.g. Mumbai, Bihar)
+  const locOf = (sh: (typeof sheets)[number]) => sh.location?.trim() || 'General';
+  const locations = Array.from(new Set(sheets.map(locOf))).sort((a, b) =>
+    a === 'General' ? 1 : b === 'General' ? -1 : a.localeCompare(b)
+  );
+  const [locFilter, setLocFilter] = useState('all');
+  const activeLoc = locFilter !== 'all' && locations.includes(locFilter) ? locFilter : 'all';
+  const showFolders = locations.length > 1 || (locations.length === 1 && locations[0] !== 'General');
+  const groups = locations
+    .filter((l) => activeLoc === 'all' || l === activeLoc)
+    .map((l) => ({ loc: l, sheets: sheets.filter((sh) => locOf(sh) === l) }));
 
   const { data: documents = [] } = useQuery({
     queryKey: ['documents', clientProjectId],
@@ -225,13 +238,42 @@ export const ClientPortalView: React.FC = () => {
           </button>
         </div>
 
+        {showFolders && (
+          <div className="tab-filter-group" style={{ marginBottom: 14, overflowX: 'auto' }}>
+            <button
+              className={`tab-filter-btn ${activeLoc === 'all' ? 'active' : ''}`}
+              onClick={() => setLocFilter('all')}
+            >
+              ALL LOCATIONS ({sheets.length})
+            </button>
+            {locations.map((l) => (
+              <button
+                key={l}
+                className={`tab-filter-btn ${activeLoc === l ? 'active' : ''}`}
+                onClick={() => setLocFilter(l)}
+              >
+                {l.toUpperCase()} ({sheets.filter((sh) => locOf(sh) === l).length})
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="blueprints-grid">
           {sheets.length === 0 && (
             <div style={{ gridColumn: '1 / -1', padding: '28px 0', textAlign: 'center', color: 'var(--ink-secondary)', fontSize: 13 }}>
               No drawings, images or videos have been shared with you yet. They will appear here the moment the studio uploads them.
             </div>
           )}
-          {sheets.map((sheet) => {
+          {groups.map((g) => (
+          <React.Fragment key={g.loc}>
+          {showFolders && (
+            <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: 8, paddingTop: 4 }}>
+              <FolderOpen size={15} />
+              <span className="label-xs" style={{ color: 'var(--ink-primary)' }}>{g.loc.toUpperCase()}</span>
+              <span className="label-xs">({g.sheets.length})</span>
+            </div>
+          )}
+          {g.sheets.map((sheet) => {
             const isAcked = ackedRevs[sheet.id];
             return (
               <div key={sheet.id} className="blueprint-card">
@@ -304,6 +346,8 @@ export const ClientPortalView: React.FC = () => {
               </div>
             );
           })}
+          </React.Fragment>
+          ))}
         </div>
       </div>
 
