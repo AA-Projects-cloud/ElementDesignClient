@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash C:/ElementDesign/.claude/auto-push.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}
