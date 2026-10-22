@@ -1,9 +1,47 @@
 import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { BrandLogo } from '../components/BrandLogo';
 import { authService, AuthRole } from '../services/authService';
 import { useAuthStore } from '../store/useAuthStore';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 import { LegalModal, LegalDoc } from '../components/LegalModal';
+
+// A password-style input with an eye button that shows / hides what was typed
+const SecretInput: React.FC<{ value: string; onChange: (v: string) => void }> = ({ value, onChange }) => {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div style={{ position: 'relative' }}>
+      <input
+        className="form-input"
+        type={visible ? 'text' : 'password'}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required
+        style={{ width: '100%', paddingRight: 40 }}
+      />
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        aria-label={visible ? 'Hide' : 'Show'}
+        title={visible ? 'Hide' : 'Show'}
+        style={{
+          position: 'absolute',
+          right: 6,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          padding: 6,
+          display: 'flex',
+          color: 'var(--ink-secondary)',
+        }}
+      >
+        {visible ? <EyeOff size={16} /> : <Eye size={16} />}
+      </button>
+    </div>
+  );
+};
 
 export const AuthView: React.FC = () => {
   const setUser = useAuthStore((s) => s.setUser);
@@ -139,25 +177,13 @@ export const AuthView: React.FC = () => {
 
           <div className="form-group">
             <label className="form-label">{!isSignup && !isAdmin && !isSupabaseConfigured ? 'Password or PIN' : 'Password'}</label>
-            <input
-              className="form-input"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <SecretInput value={password} onChange={setPassword} />
           </div>
 
           {isAdmin && (
             <div className="form-group">
               <label className="form-label">Admin Security Key</label>
-              <input
-                className="form-input"
-                type="password"
-                value={securityKey}
-                onChange={(e) => setSecurityKey(e.target.value)}
-                required
-              />
+              <SecretInput value={securityKey} onChange={setSecurityKey} />
             </div>
           )}
 

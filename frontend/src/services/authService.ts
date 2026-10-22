@@ -164,7 +164,7 @@ export const authService = {
             role: data.role,
             name,
             phone: data.phone?.trim() || '',
-            security_key: data.role === 'admin' ? data.securityKey : undefined,
+            security_key: data.role === 'admin' ? (data.securityKey || '').trim() : undefined,
           },
         },
       });
@@ -246,7 +246,13 @@ export const authService = {
         );
       }
       if (data.role === 'admin') {
-        const { data: ok } = await supabase.rpc('check_admin_key', { p_key: data.securityKey });
+        const { data: ok, error: keyError } = await supabase.rpc('check_admin_key', {
+          p_key: (data.securityKey || '').trim(),
+        });
+        if (keyError) {
+          await supabase.auth.signOut();
+          throw new Error(`Could not verify the security key (${keyError.message}). Please try again.`);
+        }
         if (!ok) {
           await supabase.auth.signOut();
           throw new Error('Invalid security key. Admin access requires a valid security code.');
