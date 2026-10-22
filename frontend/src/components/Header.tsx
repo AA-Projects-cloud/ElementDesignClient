@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrandLogo } from './BrandLogo';
 import { useUiStore } from '../store/useUiStore';
 import { useQuery } from '@tanstack/react-query';
 import { clientsService } from '../services/clientsService';
@@ -61,7 +62,7 @@ export const Header: React.FC = () => {
     <header className="global-header">
       <div className="header-left">
         <div className="brand-badge" onClick={() => { setActiveWorkspace('admin'); setCurrentView('overview'); }} style={{ cursor: 'pointer' }}>
-          <div className="brand-symbol">E</div>
+          <BrandLogo />
           <div>
             <span className="brand-title">ELEMENT DESIGN</span>
           </div>

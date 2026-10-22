@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrandLogo } from '../components/BrandLogo';
 import { authService, AuthRole } from '../services/authService';
 import { useAuthStore } from '../store/useAuthStore';
 import { isSupabaseConfigured } from '../services/supabaseClient';
@@ -81,7 +82,7 @@ export const AuthView: React.FC = () => {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
-          <div className="brand-symbol">E</div>
+          <BrandLogo />
           <span className="brand-title" style={{ color: 'var(--ink-primary)' }}>ELEMENT DESIGN</span>
         </div>
 
