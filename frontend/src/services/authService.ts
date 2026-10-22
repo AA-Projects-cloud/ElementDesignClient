@@ -12,11 +12,10 @@ export interface AuthUser {
   clientId?: string; // set for client users: the only customer record they may view
 }
 
-// Security code required for every admin sign-up and admin login.
-// (With Supabase it is also enforced by the database, so it cannot be bypassed from the browser.)
-// Set VITE_ADMIN_SECURITY_KEY in frontend/.env.local (never commit it).
-const ADMIN_SECURITY_KEY = import.meta.env.VITE_ADMIN_SECURITY_KEY as string | undefined;
-const isValidAdminKey = (key?: string) => Boolean(ADMIN_SECURITY_KEY) && key === ADMIN_SECURITY_KEY;
+// Admin sign-up and admin sign-in need a security code. The real code is checked ONLY by the
+// database (Supabase), so it never appears in this website's code. Here we just make sure
+// something was typed; without Supabase (local demo mode) any non-empty code is accepted.
+const hasKey = (key?: string) => Boolean(key && key.trim());
 
 // ===========================================================================
 // Supabase mode (real accounts)
@@ -152,7 +151,7 @@ export const authService = {
     if (data.role === 'client' && (data.phone || '').replace(/\D/g, '').length < 10) {
       throw new Error('Please enter a valid mobile number (at least 10 digits).');
     }
-    if (data.role === 'admin' && !isValidAdminKey(data.securityKey)) {
+    if (data.role === 'admin' && !hasKey(data.securityKey)) {
       throw new Error('Invalid security key. Admin accounts require a valid security code.');
     }
 
@@ -169,7 +168,12 @@ export const authService = {
           },
         },
       });
-      if (error) throw new Error(friendlyAuthError(error.message));
+      if (error) {
+        if (data.role === 'admin' && /database error/i.test(error.message)) {
+          throw new Error('Invalid security key. Admin accounts require a valid security code.');
+        }
+        throw new Error(friendlyAuthError(error.message));
+      }
       // Supabase hides duplicate emails: an empty identities list means the address is taken.
       if (res.user && res.user.identities && res.user.identities.length === 0) {
         throw new Error('An account with this email already exists. Please sign in.');
@@ -224,7 +228,7 @@ export const authService = {
   }): Promise<AuthUser> {
     const id = data.identifier.trim().toLowerCase();
 
-    if (data.role === 'admin' && !isValidAdminKey(data.securityKey)) {
+    if (data.role === 'admin' && !hasKey(data.securityKey)) {
       throw new Error('Invalid security key. Admin access requires a valid security code.');
     }
 
