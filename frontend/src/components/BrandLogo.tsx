@@ -4,7 +4,7 @@ import React from 'react';
 export const BrandLogo: React.FC = () => (
   <div className="brand-symbol" style={{ backgroundColor: 'var(--ink-primary)', padding: 2, flexShrink: 0, boxSizing: 'border-box' }}>
     <img
-      src="/brand/logo-mark.png"
+      src="/brand/logo-diamond.png"
       alt="Element Design"
       style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
     />
