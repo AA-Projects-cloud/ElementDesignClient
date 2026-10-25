@@ -86,7 +86,7 @@ export const ManageAccessModal: React.FC = () => {
               id="watermark-toggle"
               checked={watermarkStrict}
               onChange={(e) => setWatermarkStrict(e.target.checked)}
-              style={{ width: 16, height: 16, accentColor: '#111' }}
+              style={{ width: 16, height: 16, accentColor: '#555555' }}
             />
             <label htmlFor="watermark-toggle" style={{ fontSize: 12.5, fontWeight: 600 }}>
               Enforce Dynamic Watermarking on all PDF downloads

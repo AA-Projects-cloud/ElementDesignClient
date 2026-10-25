@@ -44,7 +44,7 @@ export const ImpersonationBanner: React.FC = () => {
         className="btn btn-secondary btn-sm"
         style={{
           backgroundColor: '#FFFFFF',
-          color: '#111111',
+          color: '#555555',
           border: 'none',
           padding: '4px 10px',
         }}

@@ -14,21 +14,21 @@
   --accent-muted: #D8C9B8;
   --border-hairline: #E3DDD5;
   --border-subtle: #ECE6DE;
-  --border-dark: #111111;
+  --border-dark: #555555;
   
   /* Inks */
-  --ink-primary: #111111;
+  --ink-primary: #555555;
   --ink-secondary: #6E685F;
   --ink-tertiary: #9B9489;
   --ink-inverted: #FFFFFF;
 
   /* Architectural Status Tones */
   --status-active-bg: #E8DED0;
-  --status-active-ink: #111111;
+  --status-active-ink: #555555;
   --status-active-border: #D8C9B8;
-  --status-approved-bg: #111111;
+  --status-approved-bg: #555555;
   --status-approved-ink: #FFFFFF;
-  --status-approved-border: #111111;
+  --status-approved-border: #555555;
   --status-review-bg: #F5F0E9;
   --status-review-ink: #6E685F;
   --status-review-border: #E3DDD5;
@@ -51,9 +51,9 @@
   --radius-square: 0px;
 
   /* Elevation (Planar Tectonic Layering - Zero Fuzzy Blur) */
-  --shadow-hairline: 0 1px 2px rgba(17, 17, 17, 0.04);
-  --shadow-overlay: 0px 4px 0px 0px rgba(17, 17, 17, 0.05), 0px 1px 2px 0px rgba(17, 17, 17, 0.08);
-  --shadow-modal: 0px 8px 0px 0px rgba(17, 17, 17, 0.06), 0px 4px 12px 0px rgba(17, 17, 17, 0.12);
+  --shadow-hairline: 0 1px 2px rgba(85, 85, 85, 0.04);
+  --shadow-overlay: 0px 4px 0px 0px rgba(85, 85, 85, 0.05), 0px 1px 2px 0px rgba(85, 85, 85, 0.08);
+  --shadow-modal: 0px 8px 0px 0px rgba(85, 85, 85, 0.06), 0px 4px 12px 0px rgba(85, 85, 85, 0.12);
 
   /* Spacing Scale (Disciplined Multiples of 4px) */
   --space-2: 2px;

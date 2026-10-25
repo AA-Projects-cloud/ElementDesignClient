@@ -27,8 +27,8 @@
   border: 1px solid var(--ink-primary);
 }
 .btn-primary:hover {
-  background-color: #262626;
-  border-color: #262626;
+  background-color: #666666;
+  border-color: #666666;
 }
 .btn-primary:active {
   transform: scale(0.99);
@@ -445,7 +445,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(17, 17, 17, 0.65);
+  background-color: rgba(85, 85, 85, 0.65);
   backdrop-filter: blur(2px);
   z-index: 1000;
   display: none;
@@ -590,7 +590,7 @@
   justify-content: center;
   cursor: ew-resize;
   border: 2px solid #FFF;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 6px rgba(85, 85, 85,0.3);
   z-index: 20;
 }
 

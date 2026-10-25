@@ -531,7 +531,7 @@ export const DashboardView: React.FC = () => {
                   onClick={() => openSiteLogDrawer(log.id)}
                 >
                   <MediaView path={log.photos[0]?.path} mediaType={log.photos[0]?.mediaType} alt={log.title} style={{ cursor: 'pointer' }} />
-                  <span style={{ position: 'absolute', bottom: 2, right: 2, background: 'rgba(0,0,0,0.7)', color: '#FFF', fontSize: 8, padding: '1px 3px', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ position: 'absolute', bottom: 2, right: 2, background: 'rgba(85, 85, 85,0.7)', color: '#FFF', fontSize: 8, padding: '1px 3px', fontFamily: 'var(--font-mono)' }}>
                     {log.photos.length} Files
                   </span>
                 </div>
