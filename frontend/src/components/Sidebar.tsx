@@ -117,7 +117,7 @@ export const Sidebar: React.FC = () => {
             gap: 6,
           }}
         >
-          <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#555555' }} />
+          <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#737373' }} />
           <span>STUDIO LONDON</span>
         </div>
       </div>

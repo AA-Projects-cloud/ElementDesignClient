@@ -47,7 +47,7 @@ export const MediaView: React.FC<MediaViewProps> = ({ path, mediaType = 'image',
       return (
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <video src={url} muted preload="metadata" style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }} />
-          <div style={{ position: 'absolute', right: 6, bottom: 6, background: '#555555', color: '#FFF', borderRadius: 2, padding: '2px 5px', display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700 }}>
+          <div style={{ position: 'absolute', right: 6, bottom: 6, background: '#737373', color: '#FFF', borderRadius: 2, padding: '2px 5px', display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700 }}>
             <Film size={10} /> VIDEO
           </div>
         </div>
@@ -72,7 +72,7 @@ export const MediaView: React.FC<MediaViewProps> = ({ path, mediaType = 'image',
               position: 'absolute',
               right: 8,
               bottom: 8,
-              background: '#555555',
+              background: '#737373',
               color: '#FFF',
               borderRadius: 2,
               padding: '2px 6px',

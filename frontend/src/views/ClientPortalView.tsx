@@ -161,7 +161,7 @@ export const ClientPortalView: React.FC = () => {
           {!isClientUser && (
             <button
               className="btn btn-secondary btn-sm"
-              style={{ background: '#FFF', color: '#555555' }}
+              style={{ background: '#FFF', color: '#737373' }}
               onClick={() => {
                 if (isImpersonating) {
                   stopImpersonation();
@@ -367,7 +367,7 @@ export const ClientPortalView: React.FC = () => {
             <div key={log.id} className="site-feed-post">
               <div className="site-feed-post-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#555555' }} />
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#737373' }} />
                   <strong style={{ fontSize: 13.5 }}>{log.title}</strong>
                 </div>
                 <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--ink-secondary)' }}>
@@ -451,7 +451,7 @@ export const ClientPortalView: React.FC = () => {
                     style={{
                       width: 36,
                       height: 36,
-                      background: '#555555',
+                      background: '#737373',
                       color: '#FFF',
                       display: 'flex',
                       alignItems: 'center',

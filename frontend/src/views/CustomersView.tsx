@@ -288,8 +288,8 @@ export const CustomersView: React.FC = () => {
                   <svg width="100%" height="100%" viewBox="0 0 140 100" style={{ background: '#EFEAE1' }}>
                     <rect x="15" y="15" width="110" height="70" fill="none" stroke="#D8C9B8" strokeWidth="1.5" />
                     <line x1="15" y1="50" x2="125" y2="50" stroke="#D8C9B8" strokeDasharray="4 2" />
-                    <circle cx="70" cy="50" r="14" fill="#E8DED0" stroke="#555555" strokeWidth="1" />
-                    <text x="70" y="54" fontSize="8" fontFamily="'Space Grotesk'" fontWeight="700" textAnchor="middle" fill="#555555">
+                    <circle cx="70" cy="50" r="14" fill="#E8DED0" stroke="#737373" strokeWidth="1" />
+                    <text x="70" y="54" fontSize="8" fontFamily="'Space Grotesk'" fontWeight="700" textAnchor="middle" fill="#737373">
                       INTERIOR
                     </text>
                   </svg>

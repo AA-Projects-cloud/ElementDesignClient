@@ -54,7 +54,7 @@ export const VectorLightbox: React.FC = () => {
       <div className="modal-sheet lightbox-sheet" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span className="label-xs" style={{ background: '#555555', color: '#FFF', padding: '2px 6px', borderRadius: 2 }}>
+            <span className="label-xs" style={{ background: '#737373', color: '#FFF', padding: '2px 6px', borderRadius: 2 }}>
               VECTOR INSPECTOR
             </span>
             <h3 style={{ fontSize: 16 }}>

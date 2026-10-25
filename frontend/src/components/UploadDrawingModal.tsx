@@ -363,7 +363,7 @@ export const UploadDrawingModal: React.FC = () => {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <input type="checkbox" id="check-watermark-real" defaultChecked style={{ width: 16, height: 16, accentColor: '#555555' }} />
+              <input type="checkbox" id="check-watermark-real" defaultChecked style={{ width: 16, height: 16, accentColor: '#737373' }} />
               <label htmlFor="check-watermark-real" style={{ fontSize: 12, color: 'var(--ink-primary)' }}>
                 Publish to the client portal immediately
               </label>

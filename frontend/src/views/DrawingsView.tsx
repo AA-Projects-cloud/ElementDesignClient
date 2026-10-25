@@ -238,7 +238,7 @@ export const DrawingsView: React.FC = () => {
         <div className="folio-card">
           <div className="folio-card-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span className="label-xs" style={{ background: '#555555', color: '#FFF', padding: '2px 6px', borderRadius: 2 }}>
+              <span className="label-xs" style={{ background: '#737373', color: '#FFF', padding: '2px 6px', borderRadius: 2 }}>
                 {featuredSheet.code}
               </span>
               <h2 style={{ fontSize: 16 }}>{featuredSheet.title}</h2>
