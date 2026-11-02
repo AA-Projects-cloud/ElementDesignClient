@@ -1,0 +1,345 @@
+/* ==========================================================================
+   RESPONSIVE LAYER
+   Makes the application fit every screen: phones (Android / iOS), tablets,
+   laptops and large monitors. Loaded after the main styles, so the desktop
+   design is unchanged - these rules only adapt it to smaller or larger screens.
+   ========================================================================== */
+
+/* ---- Every device ------------------------------------------------------- */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  overflow-x: hidden;
+}
+img,
+video,
+iframe,
+svg {
+  max-width: 100%;
+}
+
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Phones with a notch / home bar (iOS, Android edge-to-edge) */
+.global-header {
+  padding-top: env(safe-area-inset-top);
+  padding-left: max(var(--space-24), env(safe-area-inset-left));
+  padding-right: max(var(--space-24), env(safe-area-inset-right));
+  height: auto;
+  min-height: calc(var(--header-height) + env(safe-area-inset-top));
+}
+.main-viewport {
+  padding-bottom: calc(var(--space-32) + env(safe-area-inset-bottom));
+}
+
+/* Long text never forces the page wider than the screen */
+.view-header-title,
+.client-hero-title,
+.brand-title,
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: anywhere;
+}
+
+/* Cards in the grids shrink with the screen instead of overflowing */
+.blueprints-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+}
+
+/* Easier to tap on touch screens */
+@media (pointer: coarse) {
+  .btn,
+  .tab-filter-btn,
+  .workspace-btn,
+  .sidebar-nav-item,
+  .client-tab-link {
+    min-height: 40px;
+  }
+  .btn-icon {
+    min-width: 40px;
+  }
+}
+
+/* ---- Large monitors ----------------------------------------------------- */
+@media (min-width: 1700px) {
+  :root {
+    --content-max-width: 1680px;
+  }
+}
+@media (min-width: 2200px) {
+  :root {
+    --content-max-width: 2000px;
+  }
+}
+
+/* ---- Laptops / small desktops ------------------------------------------ */
+@media (max-width: 1280px) {
+  .header-center {
+    max-width: 320px;
+  }
+}
+
+/* ---- Tablets (landscape + portrait) ------------------------------------ */
+@media (max-width: 1100px) {
+  .header-center,
+  .studio-status-indicator {
+    display: none;
+  }
+  .main-viewport {
+    padding-left: var(--space-24);
+    padding-right: var(--space-24);
+  }
+  .pipeline-steps-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .blueprint-pipeline-strip {
+    grid-template-columns: 1fr;
+  }
+  /* two-column forms that use inline grids stay readable */
+  [style*='grid-template-columns: 1fr 340px'] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .client-hero-folio {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .client-hero-stats {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .client-hero-stat-box {
+    flex: 1 1 220px;
+    min-width: 0;
+  }
+  [style*='grid-template-columns: 280px 1fr'] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ---- Phones and small tablets ------------------------------------------ */
+@media (max-width: 768px) {
+  /* Top bar: wraps instead of overflowing */
+  .global-header {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    padding-top: calc(8px + env(safe-area-inset-top));
+    padding-bottom: 8px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+  .header-left {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .workspace-switcher {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .workspace-btn {
+    white-space: nowrap;
+    padding: 6px 10px;
+  }
+  .user-meta {
+    display: none;
+  }
+  .header-right {
+    gap: var(--space-8);
+  }
+  /* Notification list fits the screen */
+  [style*='width: 320px'] {
+    width: calc(100vw - 24px) !important;
+    max-width: 360px;
+  }
+
+  /* Admin sidebar becomes a swipeable bar under the top bar */
+  .app-sidebar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 6px 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .app-sidebar > div {
+    display: flex;
+    align-items: center;
+  }
+  .sidebar-brand-header,
+  .sidebar-nav-title {
+    display: none;
+  }
+  .sidebar-nav-section {
+    padding: 0;
+  }
+  .sidebar-nav-list {
+    flex-direction: row;
+    gap: 4px;
+  }
+  .sidebar-nav-item {
+    white-space: nowrap;
+    padding: 8px 12px;
+  }
+  .sidebar-footer {
+    flex-direction: row;
+    border-top: none;
+    border-left: 1px solid var(--border-hairline);
+    padding: 0 0 0 8px;
+    white-space: nowrap;
+  }
+
+  .main-viewport {
+    padding-left: var(--space-16);
+    padding-right: var(--space-16);
+    padding-top: var(--space-20);
+  }
+
+  /* Page headers stack */
+  .view-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .view-header-title {
+    font-size: 22px;
+  }
+  .view-header-actions {
+    width: 100%;
+  }
+  .view-header-actions > * {
+    flex: 1 1 auto;
+  }
+
+  /* Tables scroll sideways inside their card */
+  .folio-card {
+    overflow-x: auto;
+  }
+  .data-table {
+    min-width: 680px;
+  }
+  .table-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Filter tabs scroll instead of wrapping off-screen */
+  .tab-filter-group {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-filter-btn {
+    white-space: nowrap;
+  }
+  .search-input-wrap {
+    min-width: 0 !important;
+    width: 100%;
+  }
+
+  /* Customer portal */
+  .client-portal-header-bar {
+    padding: 8px var(--space-16);
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .client-hero-folio {
+    padding: var(--space-20);
+  }
+  .client-hero-title {
+    font-size: 26px;
+  }
+  .client-subnav-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .client-nav-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .client-tab-link {
+    white-space: nowrap;
+  }
+  .site-feed-photos-row {
+    grid-template-columns: 1fr;
+  }
+  .client-folio-card-body {
+    flex-direction: column;
+  }
+  .client-thumbnail-box {
+    width: 100%;
+  }
+  .client-card-actions {
+    flex-wrap: wrap;
+  }
+
+  /* Pop-ups use the whole screen width */
+  .modal-overlay {
+    padding: 8px;
+  }
+  .modal-sheet {
+    max-height: 94vh;
+    max-height: 94dvh;
+  }
+  .modal-header,
+  .modal-footer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .modal-body {
+    padding: 16px;
+  }
+  .lightbox-toolbar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .lightbox-sheet {
+    height: 94vh;
+    height: 94dvh;
+  }
+
+  /* Form rows with two columns become one column */
+  [style*='grid-template-columns: 1fr 1fr'],
+  [style*='grid-template-columns: 2fr 1fr'] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 16px inputs stop iPhones from zooming in when a field is tapped */
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 16px;
+  }
+}
+
+/* ---- Small phones ------------------------------------------------------- */
+@media (max-width: 480px) {
+  .brand-title {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+  .view-header-title {
+    font-size: 20px;
+  }
+  .client-hero-title {
+    font-size: 22px;
+  }
+  .metric-tile-val {
+    font-size: 30px;
+  }
+  .pipeline-steps-bar {
+    grid-template-columns: 1fr;
+  }
+  .client-hero-stat-box {
+    flex: 1 1 100%;
+  }
+}

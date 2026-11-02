@@ -600,7 +600,7 @@ export const subscribeRealtime = (onChange: () => void): (() => void) => {
     .on('postgres_changes', { event: '*', schema: 'public' }, () => {
       // Batch bursts of changes (e.g. a revision + job + photos) into one refresh.
       clearTimeout(timer);
-      timer = setTimeout(onChange, 250);
+      timer = setTimeout(onChange, 800);
     })
     .subscribe();
   return () => {

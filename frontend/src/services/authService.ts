@@ -104,6 +104,126 @@ const persistSession = (user: AuthUser) => {
 };
 
 // ===========================================================================
+// Login attempt limit: 5 wrong tries, then the account is blocked for 1 hour.
+// With Supabase the counter lives in the database (login_attempts table); without it,
+// in this browser. If the database function is not installed yet, login still works.
+// ===========================================================================
+export const MAX_LOGIN_ATTEMPTS = 5;
+export const LOGIN_LOCK_SECONDS = 60 * 60;
+
+interface LimitStatus {
+  locked: boolean;
+  attemptsLeft: number;
+  retryAfterSeconds: number;
+}
+
+/** A wrong password / wrong security key (counts towards the limit). */
+class CredentialError extends Error {}
+
+/** Thrown to the sign-in screen with the attempt information for the pop-up. */
+export class LoginError extends Error {
+  attemptsLeft?: number;
+  locked: boolean;
+  retryAfterSeconds?: number;
+  constructor(message: string, status?: LimitStatus | null) {
+    super(message);
+    this.attemptsLeft = status?.attemptsLeft;
+    this.locked = Boolean(status?.locked);
+    this.retryAfterSeconds = status?.retryAfterSeconds;
+  }
+}
+
+const ATTEMPTS_KEY = 'element_design_login_attempts_v1';
+
+interface LocalAttempt {
+  count: number;
+  lockedUntil?: number;
+  lastFailedAt?: number;
+}
+
+const readAttempts = (): Record<string, LocalAttempt> => {
+  try {
+    return JSON.parse(localStorage.getItem(ATTEMPTS_KEY) || '{}');
+  } catch {
+    return {};
+  }
+};
+
+const toStatus = (a?: LocalAttempt): LimitStatus => {
+  const now = Date.now();
+  if (a?.lockedUntil && a.lockedUntil > now) {
+    return { locked: true, attemptsLeft: 0, retryAfterSeconds: Math.ceil((a.lockedUntil - now) / 1000) };
+  }
+  return { locked: false, attemptsLeft: MAX_LOGIN_ATTEMPTS - (a?.count ?? 0), retryAfterSeconds: 0 };
+};
+
+const fromRpc = (d: any): LimitStatus | null =>
+  d && typeof d === 'object'
+    ? {
+        locked: Boolean(d.locked),
+        attemptsLeft: Number(d.attempts_left ?? 0),
+        retryAfterSeconds: Number(d.retry_after_seconds ?? 0),
+      }
+    : null;
+
+const limiter = {
+  async status(email: string): Promise<LimitStatus | null> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase.rpc('login_status', { p_email: email });
+        return error ? null : fromRpc(data);
+      } catch {
+        return null;
+      }
+    }
+    const all = readAttempts();
+    const a = all[email];
+    if (a?.lockedUntil && a.lockedUntil <= Date.now()) {
+      delete all[email];
+      localStorage.setItem(ATTEMPTS_KEY, JSON.stringify(all));
+      return toStatus();
+    }
+    return toStatus(a);
+  },
+
+  async failed(email: string): Promise<LimitStatus | null> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase.rpc('login_failed', { p_email: email });
+        return error ? null : fromRpc(data);
+      } catch {
+        return null;
+      }
+    }
+    const all = readAttempts();
+    const now = Date.now();
+    let a = all[email] || { count: 0 };
+    if (a.lockedUntil && a.lockedUntil > now) return toStatus(a);
+    if (a.lastFailedAt && now - a.lastFailedAt > LOGIN_LOCK_SECONDS * 1000) a = { count: 0 };
+    a.count += 1;
+    a.lastFailedAt = now;
+    if (a.count >= MAX_LOGIN_ATTEMPTS) a.lockedUntil = now + LOGIN_LOCK_SECONDS * 1000;
+    all[email] = a;
+    localStorage.setItem(ATTEMPTS_KEY, JSON.stringify(all));
+    return toStatus(a);
+  },
+
+  async succeeded(email: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        await supabase.rpc('login_succeeded');
+      } catch {
+        /* never block a successful login */
+      }
+      return;
+    }
+    const all = readAttempts();
+    delete all[email];
+    localStorage.setItem(ATTEMPTS_KEY, JSON.stringify(all));
+  },
+};
+
+// ===========================================================================
 export const authService = {
   /** Local mode only: synchronous restore. */
   getSession(): AuthUser | null {
@@ -220,7 +340,38 @@ export const authService = {
     return session;
   },
 
+  /** Sign in with the 5-attempt / 1-hour lock-out. */
   async login(data: {
+    role: AuthRole;
+    identifier: string;
+    password: string;
+    securityKey?: string;
+  }): Promise<AuthUser> {
+    const id = data.identifier.trim().toLowerCase();
+
+    const before = await limiter.status(id);
+    if (before?.locked) {
+      const mins = Math.max(1, Math.ceil(before.retryAfterSeconds / 60));
+      throw new LoginError(
+        `Too many failed attempts. For your safety, sign-in is blocked. Try again in about ${mins} minute${mins === 1 ? '' : 's'}.`,
+        before
+      );
+    }
+
+    try {
+      const user = await this.attemptLogin(data);
+      await limiter.succeeded(id);
+      return user;
+    } catch (err) {
+      if (err instanceof CredentialError) {
+        const after = await limiter.failed(id);
+        throw new LoginError(err.message, after);
+      }
+      throw err;
+    }
+  },
+
+  async attemptLogin(data: {
     role: AuthRole;
     identifier: string;
     password: string;
@@ -234,7 +385,10 @@ export const authService = {
 
     if (isSupabaseConfigured) {
       const { error } = await supabase.auth.signInWithPassword({ email: id, password: data.password });
-      if (error) throw new Error(friendlyAuthError(error.message));
+      if (error) {
+        if (/invalid login/i.test(error.message)) throw new CredentialError('Incorrect email or password.');
+        throw new Error(friendlyAuthError(error.message));
+      }
 
       const user = await loadSupabaseUser();
       if (!user || user.role !== data.role) {
@@ -255,7 +409,7 @@ export const authService = {
         }
         if (!ok) {
           await supabase.auth.signOut();
-          throw new Error('Invalid security key. Admin access requires a valid security code.');
+          throw new CredentialError('Invalid security key. Admin access requires a valid security code.');
         }
       }
       return user;
@@ -264,7 +418,7 @@ export const authService = {
     const user = readUsers().find((u) => u.role === data.role && u.email === id);
     if (user) {
       const hash = await hashPassword(data.password, user.salt);
-      if (hash !== user.passwordHash) throw new Error('Incorrect email or password.');
+      if (hash !== user.passwordHash) throw new CredentialError('Incorrect email or password.');
       const session = toPublic(user);
       persistSession(session);
       return session;
@@ -288,6 +442,6 @@ export const authService = {
       }
     }
 
-    throw new Error('Incorrect email or password.');
+    throw new CredentialError('Incorrect email or password.');
   },
 };

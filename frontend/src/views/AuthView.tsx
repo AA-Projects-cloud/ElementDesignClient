@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { BrandLogo } from '../components/BrandLogo';
-import { authService, AuthRole } from '../services/authService';
+import { authService, AuthRole, LoginError, MAX_LOGIN_ATTEMPTS } from '../services/authService';
 import { useAuthStore } from '../store/useAuthStore';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 import { LegalModal, LegalDoc } from '../components/LegalModal';
@@ -56,6 +56,7 @@ export const AuthView: React.FC = () => {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [legalDoc, setLegalDoc] = useState<LegalDoc | null>(null);
+  const [loginAlert, setLoginAlert] = useState<{ title: string; body: string; danger: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
 
   const isSignup = mode === 'signup';
@@ -79,6 +80,25 @@ export const AuthView: React.FC = () => {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.');
+      if (err instanceof LoginError && err.attemptsLeft !== undefined) {
+        // Safety pop-up: tell the person how many attempts they have left
+        if (err.locked || err.attemptsLeft <= 0) {
+          setLoginAlert({
+            title: 'Sign-in blocked for 1 hour',
+            body: err.locked && err.retryAfterSeconds
+              ? err.message
+              : `You used all ${MAX_LOGIN_ATTEMPTS} attempts. For your safety, sign-in is blocked for 1 hour. Please try again later.`,
+            danger: true,
+          });
+        } else {
+          const n = err.attemptsLeft;
+          setLoginAlert({
+            title: `${n} attempt${n === 1 ? '' : 's'} left`,
+            body: `${err.message} You have ${n} sign-in attempt${n === 1 ? '' : 's'} left. After ${MAX_LOGIN_ATTEMPTS} wrong attempts, sign-in is blocked for 1 hour.`,
+            danger: n <= 2,
+          });
+        }
+      }
     } finally {
       setBusy(false);
     }
@@ -256,6 +276,35 @@ export const AuthView: React.FC = () => {
       </div>
 
       <LegalModal doc={legalDoc} onClose={() => setLegalDoc(null)} />
+
+      {loginAlert && (
+        <div className="modal-overlay active" onClick={() => setLoginAlert(null)}>
+          <div className="modal-sheet" style={{ maxWidth: 400 }} onClick={(e) => e.stopPropagation()} role="alertdialog">
+            <div className="modal-header">
+              <div>
+                <span className="label-xs">SECURITY NOTICE</span>
+                <h3
+                  style={{
+                    fontSize: 16,
+                    marginTop: 2,
+                    color: loginAlert.danger ? 'var(--status-alert-ink)' : 'var(--ink-primary)',
+                  }}
+                >
+                  {loginAlert.title}
+                </h3>
+              </div>
+            </div>
+            <div className="modal-body">
+              <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink-secondary)' }}>{loginAlert.body}</p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-primary" autoFocus onClick={() => setLoginAlert(null)}>
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

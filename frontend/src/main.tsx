@@ -7,6 +7,7 @@ import { App } from './App';
 import './styles/theme.css';
 import './styles/components.css';
 import './styles/views.css';
+import './styles/responsive.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
