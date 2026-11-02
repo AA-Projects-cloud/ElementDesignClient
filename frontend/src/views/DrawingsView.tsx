@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { registerBackHandler } from '../services/backStack';
 import { useUiStore } from '../store/useUiStore';
 import { useQuery } from '@tanstack/react-query';
 import { projectsService } from '../services/projectsService';
@@ -29,6 +30,17 @@ export const DrawingsView: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [tuneFilter, setTuneFilter] = useState<'all' | 'current' | 'superseded'>('all');
   const [tuneMenuOpen, setTuneMenuOpen] = useState(false);
+  useEffect(
+    () =>
+      registerBackHandler(() => {
+        if (tuneMenuOpen) {
+          setTuneMenuOpen(false);
+          return true;
+        }
+        return false;
+      }),
+    [tuneMenuOpen]
+  );
 
   const { data: projects = [] } = useQuery({ queryKey: ['projects'], queryFn: projectsService.getProjects });
   const activeProjectId = selectedProjectId || projects[0]?.id;

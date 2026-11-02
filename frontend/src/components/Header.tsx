@@ -5,6 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { clientsService } from '../services/clientsService';
 import { notificationsService } from '../services/notificationsService';
 import { useAuthStore } from '../store/useAuthStore';
+import { isSupabaseConfigured } from '../services/supabaseClient';
+import { registerBackHandler } from '../services/backStack';
 import { Search, Bell, Clock, User, LogOut, Settings as SettingsIcon } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -23,6 +25,20 @@ export const Header: React.FC = () => {
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  // Phone back button closes an open menu first
+  useEffect(
+    () =>
+      registerBackHandler(() => {
+        if (notificationsOpen || userMenuOpen) {
+          setNotificationsOpen(false);
+          setUserMenuOpen(false);
+          return true;
+        }
+        return false;
+      }),
+    [notificationsOpen, userMenuOpen]
+  );
   const [timeStr, setTimeStr] = useState('11:42 BST • STUDIO 01');
 
   // Clock updating every minute
@@ -106,8 +122,8 @@ export const Header: React.FC = () => {
           <span>{timeStr}</span>
         </div>
 
-        {/* Notification Bell Dropdown (admins only: notifications are studio-wide) */}
-        {!isClientUser && <div style={{ position: 'relative' }}>
+        {/* Notification Bell Dropdown (admins, and customers once the live database is connected) */}
+        {(!isClientUser || isSupabaseConfigured) && <div style={{ position: 'relative' }}>
           <button
             className="btn btn-icon"
             onClick={() => setNotificationsOpen(!notificationsOpen)}
@@ -177,7 +193,7 @@ export const Header: React.FC = () => {
                       onClick={async () => {
                         await notificationsService.markAsRead(n.id);
                         refetchNotifs();
-                        if (n.link) {
+                        if (n.link && !isClientUser) {
                           if (n.link.includes('drawings')) setCurrentView('drawings');
                           else if (n.link.includes('site')) setCurrentView('work-site');
                           else if (n.link.includes('customers')) setCurrentView('customers');

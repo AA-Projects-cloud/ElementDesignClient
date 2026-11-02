@@ -30,3 +30,6 @@ playwright-report/
 
 # Other local tool folders
 .codex/
+
+# Firebase config for the Android app (add yours here; keep it out of the public repo)
+frontend/android/app/google-services.json

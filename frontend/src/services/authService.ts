@@ -246,6 +246,31 @@ export const authService = {
     return loadSupabaseUser();
   },
 
+  /** Sends a password-reset link to the email (Supabase). The reply is the same whether or not the email exists. */
+  async requestPasswordReset(email: string): Promise<void> {
+    const e = email.trim().toLowerCase();
+    if (!e) throw new Error('Please enter your email address.');
+    if (!isSupabaseConfigured) {
+      throw new Error('Password reset by email works on the live version of the app.');
+    }
+    const site = (import.meta.env.VITE_PUBLIC_SITE_URL as string | undefined) || window.location.origin;
+    const { error } = await supabase.auth.resetPasswordForEmail(e, { redirectTo: site });
+    if (error) throw new Error(friendlyAuthError(error.message));
+  },
+
+  /** Sets the new password after the person opened the link from the email. */
+  async updatePassword(newPassword: string): Promise<void> {
+    if (newPassword.length < 6) throw new Error('Password must be at least 6 characters.');
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) throw new Error(friendlyAuthError(error.message));
+    try {
+      await supabase.rpc('login_succeeded'); // a reset also lifts a sign-in lock
+    } catch {
+      /* optional */
+    }
+    await supabase.auth.signOut();
+  },
+
   async logout() {
     if (isSupabaseConfigured) {
       await supabase.auth.signOut();

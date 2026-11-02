@@ -36,11 +36,15 @@ import { UploadStudioView } from './views/UploadStudioView';
 import { SettingsView } from './views/SettingsView';
 import { ClientPortalView } from './views/ClientPortalView';
 import { AuthView } from './views/AuthView';
+import { ResetPasswordView } from './views/ResetPasswordView';
+import { useBackNavigation } from './hooks/useBackNavigation';
 
 export const App: React.FC = () => {
   const { activeWorkspace: storedWorkspace, currentView, addToast } = useUiStore();
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
+  const recovery = useAuthStore((s) => s.recovery);
+  useBackNavigation();
   const queryClient = useQueryClient();
 
   // Customers can never leave the client workspace, whatever the UI state says.
@@ -82,6 +86,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     unlockNotificationSound();
   }, []);
+
+  if (recovery) {
+    return <ResetPasswordView />;
+  }
 
   if (authLoading) {
     return <div style={{ minHeight: '100vh', background: 'var(--bg-surface-1)' }} />;

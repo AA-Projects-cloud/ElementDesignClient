@@ -8,6 +8,8 @@ import { useUiStore } from './useUiStore';
 interface AuthState {
   user: AuthUser | null;
   loading: boolean;
+  /** true while the person is choosing a new password after opening the reset link */
+  recovery: boolean;
   setUser: (user: AuthUser) => void;
   logout: () => void;
 }
@@ -32,6 +34,7 @@ applyRole(initialUser);
 export const useAuthStore = create<AuthState>((set) => ({
   user: initialUser,
   loading: isSupabaseConfigured,
+  recovery: false,
   setUser: (user) => {
     // Never show one person's cached data to the next person who signs in.
     queryClient.clear();
@@ -59,6 +62,10 @@ if (isSupabaseConfigured) {
 
   // Signed out elsewhere (another tab, expired session): return to the login screen.
   supabase.auth.onAuthStateChange((event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      useAuthStore.setState({ recovery: true, loading: false });
+      return;
+    }
     if (event === 'SIGNED_OUT') {
       queryClient.clear();
       useAuthStore.setState({ user: null, loading: false });

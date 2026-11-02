@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { registerBackHandler } from '../services/backStack';
 import { useUiStore } from '../store/useUiStore';
 import { useQuery } from '@tanstack/react-query';
 import { clientsService } from '../services/clientsService';
@@ -34,6 +35,17 @@ export const DashboardView: React.FC = () => {
   const [activeStageFilter, setActiveStageFilter] = useState<'all' | 'execution' | 'design' | 'handover'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [clientPickerOpen, setClientPickerOpen] = useState(false);
+  useEffect(
+    () =>
+      registerBackHandler(() => {
+        if (clientPickerOpen) {
+          setClientPickerOpen(false);
+          return true;
+        }
+        return false;
+      }),
+    [clientPickerOpen]
+  );
   const [clientFilterId, setClientFilterId] = useState<string | null>(null);
 
   // Queries

@@ -1,53 +1,17 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { SecretInput } from '../components/SecretInput';
+import { registerBackHandler } from '../services/backStack';
 import { BrandLogo } from '../components/BrandLogo';
 import { authService, AuthRole, LoginError, MAX_LOGIN_ATTEMPTS } from '../services/authService';
 import { useAuthStore } from '../store/useAuthStore';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 import { LegalModal, LegalDoc } from '../components/LegalModal';
 
-// A password-style input with an eye button that shows / hides what was typed
-const SecretInput: React.FC<{ value: string; onChange: (v: string) => void }> = ({ value, onChange }) => {
-  const [visible, setVisible] = useState(false);
-  return (
-    <div style={{ position: 'relative' }}>
-      <input
-        className="form-input"
-        type={visible ? 'text' : 'password'}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required
-        style={{ width: '100%', paddingRight: 40 }}
-      />
-      <button
-        type="button"
-        onClick={() => setVisible((v) => !v)}
-        aria-label={visible ? 'Hide' : 'Show'}
-        title={visible ? 'Hide' : 'Show'}
-        style={{
-          position: 'absolute',
-          right: 6,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          padding: 6,
-          display: 'flex',
-          color: 'var(--ink-secondary)',
-        }}
-      >
-        {visible ? <EyeOff size={16} /> : <Eye size={16} />}
-      </button>
-    </div>
-  );
-};
-
 export const AuthView: React.FC = () => {
   const setUser = useAuthStore((s) => s.setUser);
 
   const [role, setRole] = useState<AuthRole>('client');
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>('login');
   const [name, setName] = useState('');
   const [identifier, setIdentifier] = useState('');
   const [phone, setPhone] = useState('');
@@ -61,6 +25,33 @@ export const AuthView: React.FC = () => {
 
   const isSignup = mode === 'signup';
   const isAdmin = role === 'admin';
+  const isForgot = mode === 'forgot';
+
+  // Phone back button: from "create account" / "forgot password" go back to sign in
+  useEffect(
+    () =>
+      registerBackHandler(() => {
+        if (mode !== 'login') {
+          setMode('login');
+          setError('');
+          return true;
+        }
+        return false;
+      }),
+    [mode]
+  );
+
+  // After choosing a new password the person lands here: tell them it worked
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('ed_password_reset_ok')) {
+        sessionStorage.removeItem('ed_password_reset_ok');
+        setNotice('Password updated. Please sign in with your new password.');
+      }
+    } catch {
+      /* optional */
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +59,12 @@ export const AuthView: React.FC = () => {
     setNotice('');
     setBusy(true);
     try {
+      if (isForgot) {
+        await authService.requestPasswordReset(identifier);
+        setNotice('If an account exists for that email, a password reset link has been sent. Check your inbox (and spam folder).');
+        setMode('login');
+        return;
+      }
       const user = isSignup
         ? await authService.signUp({ role, name, email: identifier, phone, password, securityKey })
         : await authService.login({ role, identifier, password, securityKey });
@@ -144,8 +141,13 @@ export const AuthView: React.FC = () => {
           <span className="brand-title" style={{ color: 'var(--ink-primary)' }}>ELEMENT DESIGN</span>
         </div>
 
-        <span className="label-xs">{isSignup ? 'CREATE YOUR ACCOUNT' : 'SIGN IN TO CONTINUE'}</span>
+        <span className="label-xs">{isForgot ? 'RESET YOUR PASSWORD' : isSignup ? 'CREATE YOUR ACCOUNT' : 'SIGN IN TO CONTINUE'}</span>
 
+        {isForgot ? (
+          <p style={{ fontSize: 12.5, lineHeight: 1.5, color: 'var(--ink-secondary)', margin: '12px 0 16px' }}>
+            Enter the email you signed up with and we will send you a link to choose a new password.
+          </p>
+        ) : (
         <div style={{ display: 'flex', margin: '12px 0 16px' }}>
           <button type="button" style={tabStyle(!isAdmin)} onClick={() => { setRole('client'); setError(''); }}>
             CUSTOMER
@@ -154,6 +156,7 @@ export const AuthView: React.FC = () => {
             ADMIN
           </button>
         </div>
+        )}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {isSignup && (
@@ -170,11 +173,11 @@ export const AuthView: React.FC = () => {
 
           <div className="form-group">
             <label className="form-label">
-              {!isSignup && !isAdmin && !isSupabaseConfigured ? 'Email or Portal ID' : 'Email'}
+              {!isSignup && !isForgot && !isAdmin && !isSupabaseConfigured ? 'Email or Portal ID' : 'Email'}
             </label>
             <input
               className="form-input"
-              type={!isSignup && !isAdmin && !isSupabaseConfigured ? 'text' : 'email'}
+              type={!isSignup && !isForgot && !isAdmin && !isSupabaseConfigured ? 'text' : 'email'}
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               required
@@ -195,12 +198,25 @@ export const AuthView: React.FC = () => {
             </div>
           )}
 
-          <div className="form-group">
-            <label className="form-label">{!isSignup && !isAdmin && !isSupabaseConfigured ? 'Password or PIN' : 'Password'}</label>
-            <SecretInput value={password} onChange={setPassword} />
-          </div>
+          {!isForgot && (
+            <div className="form-group">
+              <label className="form-label">{!isSignup && !isAdmin && !isSupabaseConfigured ? 'Password or PIN' : 'Password'}</label>
+              <SecretInput value={password} onChange={setPassword} />
+            </div>
+          )}
 
-          {isAdmin && (
+          {!isSignup && !isForgot && (
+            <button
+              type="button"
+              className="btn btn-tertiary"
+              style={{ fontSize: 11.5, padding: 0, alignSelf: 'flex-end', marginTop: -6 }}
+              onClick={() => { setMode('forgot'); setError(''); setNotice(''); }}
+            >
+              Forgot password?
+            </button>
+          )}
+
+          {isAdmin && !isForgot && (
             <div className="form-group">
               <label className="form-label">Admin Security Key</label>
               <SecretInput value={securityKey} onChange={setSecurityKey} />
@@ -238,19 +254,19 @@ export const AuthView: React.FC = () => {
           )}
 
           <button type="submit" className="btn btn-primary" disabled={busy} style={{ width: '100%' }}>
-            {isSignup ? 'CREATE ACCOUNT' : 'SIGN IN'}
+            {isForgot ? 'SEND RESET LINK' : isSignup ? 'CREATE ACCOUNT' : 'SIGN IN'}
           </button>
         </form>
 
         <div style={{ marginTop: 16, textAlign: 'center', fontSize: 12, color: 'var(--ink-secondary)' }}>
-          {isSignup ? 'Already have an account?' : "Don't have an account?"}{' '}
+          {isForgot ? 'Remembered it?' : isSignup ? 'Already have an account?' : "Don't have an account?"}{' '}
           <button
             type="button"
             className="btn btn-tertiary"
             style={{ fontSize: 12, padding: 0 }}
-            onClick={() => { setMode(isSignup ? 'login' : 'signup'); setError(''); }}
+            onClick={() => { setMode(isSignup || isForgot ? 'login' : 'signup'); setError(''); }}
           >
-            {isSignup ? 'Sign in' : 'Create one'}
+            {isSignup || isForgot ? 'Sign in' : 'Create one'}
           </button>
         </div>
 
