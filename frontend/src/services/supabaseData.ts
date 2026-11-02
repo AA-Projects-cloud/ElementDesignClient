@@ -593,11 +593,12 @@ export const sbAudit = {
 // ---------------------------------------------------------------------------
 // Realtime: any change in the database refreshes what's on screen
 // ---------------------------------------------------------------------------
-export const subscribeRealtime = (onChange: () => void): (() => void) => {
+export const subscribeRealtime = (onChange: () => void, onEvent?: (payload: any) => void): (() => void) => {
   let timer: ReturnType<typeof setTimeout> | undefined;
   const channel = supabase
     .channel('element-design-live')
-    .on('postgres_changes', { event: '*', schema: 'public' }, () => {
+    .on('postgres_changes', { event: '*', schema: 'public' }, (payload) => {
+      onEvent?.(payload);
       // Batch bursts of changes (e.g. a revision + job + photos) into one refresh.
       clearTimeout(timer);
       timer = setTimeout(onChange, 800);

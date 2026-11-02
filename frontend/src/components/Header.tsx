@@ -131,7 +131,7 @@ export const Header: React.FC = () => {
           </button>
 
           {notificationsOpen && (
-            <div
+            <div className="dropdown-panel"
               style={{
                 position: 'absolute',
                 top: 42,
@@ -209,7 +209,7 @@ export const Header: React.FC = () => {
           </div>
 
           {userMenuOpen && (
-            <div
+            <div className="dropdown-panel"
               style={{
                 position: 'absolute',
                 top: 42,

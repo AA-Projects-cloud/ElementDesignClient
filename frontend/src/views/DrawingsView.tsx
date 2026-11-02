@@ -359,7 +359,7 @@ export const DrawingsView: React.FC = () => {
                 <SlidersHorizontal size={14} />
               </button>
               {tuneMenuOpen && (
-                <div
+                <div className="dropdown-panel"
                   style={{
                     position: 'absolute',
                     top: 36,

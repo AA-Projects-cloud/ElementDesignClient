@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { authService, AuthUser } from '../services/authService';
 import { isSupabaseConfigured, supabase } from '../services/supabaseClient';
 import { queryClient } from '../services/queryClient';
+import { pushService } from '../services/pushService';
 import { useUiStore } from './useUiStore';
 
 interface AuthState {
@@ -36,9 +37,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     queryClient.clear();
     applyRole(user);
     set({ user, loading: false });
+    void pushService.register(user.id);
   },
   logout: () => {
     void authService.logout();
+    void pushService.unregister();
     queryClient.clear();
     set({ user: null });
   },
@@ -50,6 +53,7 @@ if (isSupabaseConfigured) {
     .then((user) => {
       applyRole(user);
       useAuthStore.setState({ user, loading: false });
+      if (user) void pushService.register(user.id);
     })
     .catch(() => useAuthStore.setState({ user: null, loading: false }));
 

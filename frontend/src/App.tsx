@@ -5,6 +5,7 @@ import { localDb } from './services/mockDb';
 import { useAuthStore } from './store/useAuthStore';
 import { isSupabaseConfigured } from './services/supabaseClient';
 import { subscribeRealtime } from './services/supabaseData';
+import { playNotificationSound, unlockNotificationSound } from './services/notificationSound';
 
 // Components
 import { Header } from './components/Header';
@@ -37,7 +38,7 @@ import { ClientPortalView } from './views/ClientPortalView';
 import { AuthView } from './views/AuthView';
 
 export const App: React.FC = () => {
-  const { activeWorkspace: storedWorkspace, currentView } = useUiStore();
+  const { activeWorkspace: storedWorkspace, currentView, addToast } = useUiStore();
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
   const queryClient = useQueryClient();
@@ -56,8 +57,31 @@ export const App: React.FC = () => {
   // Live updates from Supabase: uploads and changes appear without a refresh
   useEffect(() => {
     if (!isSupabaseConfigured || !user) return;
-    return subscribeRealtime(() => queryClient.invalidateQueries());
-  }, [queryClient, user]);
+    // Live notification (message + sound) while the app is open. RLS means each person only
+    // receives events about their own data.
+    const announce = (title: string, body: string) => {
+      addToast(`${title} — ${body}`, 'info');
+      playNotificationSound();
+    };
+    const onEvent = (p: any) => {
+      const table = p?.table;
+      const type = p?.eventType;
+      if (user.role === 'client') {
+        if ((table === 'revisions' || table === 'documents') && type === 'INSERT') {
+          announce('New update', 'A new file was added to your project.');
+        } else if (table === 'site_logs' && type === 'UPDATE' && p.new?.status === 'approved') {
+          announce('New site update', 'A new site update is ready to view.');
+        }
+      } else if (table === 'notifications' && type === 'INSERT' && p.new?.user_id === user.id) {
+        announce(p.new.title || 'New notification', p.new.body || '');
+      }
+    };
+    return subscribeRealtime(() => queryClient.invalidateQueries(), onEvent);
+  }, [queryClient, user, addToast]);
+
+  useEffect(() => {
+    unlockNotificationSound();
+  }, []);
 
   if (authLoading) {
     return <div style={{ minHeight: '100vh', background: 'var(--bg-surface-1)' }} />;

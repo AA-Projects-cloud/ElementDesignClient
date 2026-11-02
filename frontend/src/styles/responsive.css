@@ -10,6 +10,22 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
+
+/* Sharp text and images on every screen (no soft / blurry look) */
+html,
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img {
+  image-rendering: auto;
+}
+/* The pop-up backdrop only dims the page; it no longer blurs what is behind it */
+.modal-overlay {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
 body {
   overflow-x: hidden;
 }
@@ -155,10 +171,17 @@ h4 {
   .header-right {
     gap: var(--space-8);
   }
-  /* Notification list fits the screen */
-  [style*='width: 320px'] {
-    width: calc(100vw - 24px) !important;
-    max-width: 360px;
+  /* Pop-up menus (notifications, account, filters) always stay inside the screen */
+  .dropdown-panel {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: 70vh;
+    max-height: 70dvh;
+    overflow-y: auto;
   }
 
   /* Admin sidebar becomes a swipeable bar under the top bar */

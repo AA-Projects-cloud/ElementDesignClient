@@ -140,7 +140,7 @@ export const AuthView: React.FC = () => {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
-          <BrandLogo />
+          <BrandLogo size={56} />
           <span className="brand-title" style={{ color: 'var(--ink-primary)' }}>ELEMENT DESIGN</span>
         </div>
 

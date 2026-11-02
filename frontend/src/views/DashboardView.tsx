@@ -137,7 +137,7 @@ export const DashboardView: React.FC = () => {
             </button>
 
             {clientPickerOpen && (
-              <div
+              <div className="dropdown-panel"
                 style={{
                   position: 'absolute',
                   top: 40,
